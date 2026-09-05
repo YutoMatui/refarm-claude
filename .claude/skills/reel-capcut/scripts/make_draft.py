@@ -32,6 +32,23 @@ CAPCUT_DRAFTS = os.path.expandvars(
 SE_LIB = os.path.expandvars(r"%USERPROFILE%\Videos\リール素材\SE_CapCutライブラリ")
 STABLE_ROOT = os.path.expandvars(r"%USERPROFILE%\Videos\リール素材")
 
+# 全員で共有する素材（Drive）。効果音・OP/ED・フォント。
+# ここに無いと、メンバーのPCでは効果音やOPが見つからず「別の質感の動画」になる（2026-09-05に実際に起きた）。
+COMMON = r"G:\マイドライブ\50日企画素材\_共通素材"
+COMMON_DIRS = [
+    os.path.join(COMMON, "SE_CapCutライブラリ"),
+    os.path.join(COMMON, "OP_ED"),
+    os.path.join(COMMON, "フォント"),
+    SE_LIB,
+    os.path.join(STABLE_ROOT, "フォント"),
+    r"G:\マイドライブ\50日企画素材\7 14 素材",     # OP/EDの元の置き場
+]
+
+# テロップのフォント = コーポレート・ロゴ（ラウンド）ver3 Bold。CapCut内の名前は「企業」
+FONT_ID = "7532058832042790161"
+FONT_CACHE = os.path.join(os.path.expandvars(r"%LOCALAPPDATA%\CapCut\User Data\Cache\effect"), FONT_ID)
+CANVAS_W, CANVAS_H = 1080, 1920
+
 # 録音のヒスノイズ除去（S/N +16dB・音声帯域は無傷。実測で確認済み）
 DENOISE = "highpass=f=85,afftdn=nr=16:nf=-42,lowpass=f=14000"
 
@@ -64,10 +81,29 @@ def find_source(name, sources):
         for root, _dirs, files in os.walk(d):
             if name in files:
                 return os.path.join(root, name)
-    p = os.path.join(SE_LIB, name)
-    if os.path.exists(p):
-        return p
+    for d in COMMON_DIRS:
+        p = os.path.join(d, name)
+        if os.path.exists(p):
+            return p
     return None
+
+
+def cover_scale(vmat, fit):
+    """横長素材を縦画面いっぱいに拡大する倍率。
+
+    CapCut は素材を画面に「収める」(contain) のが既定なので、横長の素材を置くと上下に黒帯が出る。
+    黒帯のままだと素人っぽく見える。1080x1920 を覆う (cover) 倍率を計算して ClipSettings に渡す。
+    画面録画など切れてはいけない素材だけ plan で "fit": "contain" を指定する。
+    """
+    if fit == "contain":
+        return None
+    w, h = getattr(vmat, "width", 0), getattr(vmat, "height", 0)
+    if not w or not h:
+        return None
+    contain = min(CANVAS_W / w, CANVAS_H / h)
+    cover = max(CANVAS_W / w, CANVAS_H / h)
+    s = cover / contain
+    return None if abs(s - 1.0) < 0.01 else s
 
 
 def stage(name, sources, assets_dir):
@@ -178,6 +214,50 @@ def nativize(draft_dir, draft_name, template_path):
               ensure_ascii=False, separators=(",", ":"))
 
 
+def inject_font(content_p):
+    """テロップのフォントを「企業」（コーポレート・ロゴ ラウンド ver3 Bold）にする。
+
+    pyJianYingDraft はフォント情報を一切書かないので、生成直後のドラフトは CapCut 既定のゴシックになる。
+    これまではゆうとが毎回 CapCut 上で全選択→一括変更していた。その手作業を無くすため、
+    ゆうと編集版（間借り編2_v5）のテキスト素材と同じ形をここで書き足す。
+    """
+    import uuid
+    c = json.load(open(content_p, encoding="utf-8"))
+    texts = c.get("materials", {}).get("texts", [])
+    if not texts:
+        return False
+    ttf = ""
+    if os.path.isdir(FONT_CACHE):
+        for root, _dirs, files in os.walk(FONT_CACHE):
+            for f in files:
+                if f.lower().endswith((".ttf", ".otf")):
+                    ttf = os.path.join(root, f).replace("\\", "/")
+    if not ttf:
+        # このPCの CapCut がまだ「企業」を落としていない。手元のTTFで代用する
+        local = find_source("メインテロップ.ttf", [])
+        ttf = local.replace("\\", "/") if local else ""
+    for t in texts:
+        t.update({"font_path": ttf, "font_resource_id": FONT_ID, "font_id": "",
+                  "font_title": "none", "font_name": "", "font_source_platform": 1,
+                  "font_category_id": "", "font_category_name": "", "font_url": "",
+                  "font_third_resource_id": "", "font_team_id": ""})
+        t["fonts"] = [{"id": str(uuid.uuid4()).upper(), "resource_id": FONT_ID,
+                       "third_resource_id": "", "category_id": "preset",
+                       "category_name": "プリセット", "source_platform": 1, "path": ttf,
+                       "effect_id": FONT_ID, "title": "企業", "team_id": "", "file_uri": "",
+                       "request_id": ""}]
+        try:
+            cj = json.loads(t.get("content", "{}"))
+            for st in cj.get("styles", []):
+                st["font"] = {"path": ttf, "id": FONT_ID}
+            t["content"] = json.dumps(cj, ensure_ascii=False)
+        except Exception:
+            pass
+    json.dump(c, open(content_p, "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
+    return bool(ttf)
+
+
 # ── 本体 ────────────────────────────────────────────────────
 def main(plan_path):
     plan = json.load(open(plan_path, encoding="utf-8"))
@@ -188,6 +268,21 @@ def main(plan_path):
     if not os.path.isdir(CAPCUT_DRAFTS):
         die("CapCutのドラフト置き場が見つかりません: " + CAPCUT_DRAFTS +
             "\n  CapCutをインストールして一度起動してください。")
+    if not segments:
+        die("segments が空です。")
+
+    # 骨格の検査。OPとEDが無い動画は「りふぁーむの動画」に見えない（reference/style.md 1.）
+    if not plan.get("no_op_ed"):
+        first = (segments[0].get("clips") or [{}])[0].get("file", "")
+        last = (segments[-1].get("clips") or [{}])[-1].get("file", "")
+        if "オープニング" not in first:
+            die("最初のセグメントが オープニング.mp4 で始まっていません（今: %s）。\n"
+                "  全本共通で OP を付けます。意図して外す場合だけ plan に \"no_op_ed\": true を書いてください。"
+                % (first or "なし"))
+        if "エンディング" not in last:
+            die("最後のセグメントが エンディング.mp4 で終わっていません（今: %s）。\n"
+                "  全本共通で ED を付けます。意図して外す場合だけ plan に \"no_op_ed\": true を書いてください。"
+                % (last or "なし"))
     os.makedirs(assets_dir, exist_ok=True)
 
     print("素材をそろえます")
@@ -221,9 +316,11 @@ def main(plan_path):
         # 音声なしのセグメントは、1本目のクリップの尺をそのまま使う
         if not seg.get("audio"):
             vmat = d.VideoMaterial(os.path.join(assets_dir, clips[0]["file"]))
+            s = cover_scale(vmat, clips[0].get("fit"))
+            cs = d.ClipSettings(scale_x=s, scale_y=s) if s else None
             script.add_segment(d.VideoSegment(vmat, Timerange(cursor, vmat.duration),
                                               source_timerange=Timerange(0, vmat.duration),
-                                              volume=1.0), tv)
+                                              volume=1.0, clip_settings=cs), tv)
             durs.append(vmat.duration)
             cursor += vmat.duration
             continue
@@ -238,21 +335,21 @@ def main(plan_path):
             vmat = d.VideoMaterial(os.path.join(assets_dir, c["file"]))
             off = round(c.get("offset", 0) * US)
             avail = max(300_000, vmat.duration - off - 50_000)
-            mats.append((vmat, off, avail, c.get("dur")))
+            mats.append((vmat, off, avail, c.get("dur"), c.get("fit")))
 
-        fixed_total = sum(round(f * US) for _, _, _, f in mats if f is not None)
+        fixed_total = sum(round(f * US) for _, _, _, f, _fit in mats if f is not None)
         flex_n = sum(1 for m in mats if m[3] is None)
         flex_each = max(300_000, (adur - fixed_total) // flex_n) if flex_n else 0
 
         takes, remaining = [], adur
-        for vmat, off, avail, fixed in mats:
+        for vmat, off, avail, fixed, fit in mats:
             want = round(fixed * US) if fixed is not None else flex_each
             take = min(want, avail)
-            takes.append([vmat, off, take, avail])
+            takes.append([vmat, off, take, avail, fit])
             remaining -= take
         if remaining > 0:
             # 足りない分は最後のクリップを伸ばす。それでも足りなければ警告する
-            vmat, off, take, avail = takes[-1]
+            vmat, off, take, avail, _fit = takes[-1]
             add = min(remaining, avail - take)
             takes[-1][2] = take + add
             if remaining - add > 50_000:
@@ -263,13 +360,15 @@ def main(plan_path):
             takes[-1][2] = max(100_000, takes[-1][2] + remaining)
 
         t = cursor
-        for vmat, off, take, _ in takes:
+        for vmat, off, take, _avail, fit in takes:
             if take <= 0:
                 continue
+            s = cover_scale(vmat, fit)
+            cs = d.ClipSettings(scale_x=s, scale_y=s) if s else None
             # 現場音はミュート（ナレーションと混ざる）
             script.add_segment(d.VideoSegment(vmat, Timerange(t, take),
                                               source_timerange=Timerange(off, take),
-                                              volume=0.0), tv)
+                                              volume=0.0, clip_settings=cs), tv)
             t += take
         durs.append(adur)
         cursor += adur
@@ -317,13 +416,17 @@ def main(plan_path):
         se_end[k] = at + amat.duration
 
     script.save()
-    nativize(os.path.join(CAPCUT_DRAFTS, name), name,
-             pick_template(plan.get("template_draft")))
+    draft_dir = os.path.join(CAPCUT_DRAFTS, name)
+    nativize(draft_dir, name, pick_template(plan.get("template_draft")))
+    font_ok = inject_font(os.path.join(draft_dir, "draft_content.json"))
 
     print("")
-    print("できました: %s" % os.path.join(CAPCUT_DRAFTS, name))
+    print("できました: %s" % draft_dir)
     print("長さ: %.2f秒" % (total / US))
     print("CapCutを再起動すると一覧に出ます。")
+    if not font_ok:
+        print("※ フォント「企業」の実体がこのPCに見つかりませんでした。")
+        print("  CapCutで開いて既定のゴシックになっていたら、テロップを全選択→フォント「企業」に一括変更してください。")
 
 
 if __name__ == "__main__":
