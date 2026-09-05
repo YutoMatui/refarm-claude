@@ -20,6 +20,8 @@ refarm-claude/
 │   ├── commands/          ← スキル（/flyer /refarm-slide /soup-recipe /research /leader-meeting-prep /weekly-team-report）
 │   ├── agents/impl-exec.md
 │   ├── skills/dev-orchestra/
+│   ├── skills/reel-capcut/    ← 台本→CapCutドラフト（メンバーが動画を作る入口）
+│   ├── skills/reel-build/     ← 完成mp4まで焼き込むときの詳細手順
 │   └── settings.json      ← Notion等の許可設定（秘密情報なし）
 ├── slides/themes/         ← /refarm-slide のテーマCSS
 ├── rrep-slides/rrep.md    ← スライドの見本
@@ -69,3 +71,25 @@ refarm-claude/
 | /soup-recipe | soup-app リポジトリをこのリポジトリの隣に clone（無い場合は概算モードで動く） |
 | /research /leader-meeting-prep /weekly-team-report | Notion コネクタ |
 | dev-orchestra | 対象リポジトリ（soup-app / okaeri-noen / refarm-hp）へのアクセス権 |
+| reel-capcut | CapCutデスクトップ版・Googleドライブ（パソコン版）・ffmpeg・`pip install pyJianYingDraft`。生成AIを使う場合のみ `GEMINI_API_KEY`。**手順は `.claude/skills/reel-capcut/reference/setup.md`** |
+| reel-build | reel-capcut と同じ（完成mp4まで書き出すとき用） |
+
+---
+
+## E. 動画づくり（reel-capcut）
+
+Notionの台本を渡すと、Driveから素材と録音を探して **CapCutで開けるドラフト** にして返します。
+メンバー向けの使い方は Notion の
+[🎬 Claudeで動画をつくる（メンバー用マニュアル）](https://app.notion.com/p/3d291268b8988181bc8ededd22cf4595) を見てください。
+
+**お金がかかる操作があります。** 素材が足りないカットを画像から動画にする機能は
+1本（8秒）約180円です。次の歯止めを入れてあります。
+
+- 生成の前に金額を提示し、**月の上限（既定3,000円）を超えるものは実行前に止まる**
+- だれが・いつ・何に・いくら使ったかを、Drive上の共有台帳
+  `G:\マイドライブ\50日企画素材\_API利用ログ.jsonl` に全員ぶん記録する
+- 「今月のAPI利用いくら？」と聞けば、人ごと・モデルごとの内訳が出る
+
+台帳に載るのはこのスキル経由の分だけです。**本当の請求は Google Cloud Console →
+お支払い → レポート（SKU別）が正**なので、月末に必ず突き合わせてください。
+誰の分か請求側で分けたいときは、メンバーごとに別のAPIキーを発行します。

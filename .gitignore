@@ -12,3 +12,8 @@ flyers/*.pdf
 flyers/img/generated_*
 .DS_Store
 Thumbs.db
+
+# 動画スキル（reel-capcut）
+.claude/skills/reel-capcut/scripts/_asset_index.json
+.claude/skills/reel-capcut/scripts/_API利用ログ_ローカル.jsonl
+.claude/skills/reel-capcut/scripts/_API利用ログ_設定.json

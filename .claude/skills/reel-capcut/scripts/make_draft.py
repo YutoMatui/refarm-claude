@@ -1,0 +1,332 @@
+# -*- coding: utf-8 -*-
+"""plan.json を CapCut ドラフトに変換する（汎用版）。
+
+これまでは企画ごとに capcut_export9.py のようなスクリプトを複製して SEGS を書き換えていた。
+このスクリプトは中身を plan.json に外出しして、コードを触らなくても新しい動画を作れるようにしたもの。
+
+    python make_draft.py plan.json
+
+plan.json の形（詳しくは SKILL.md）:
+{
+  "name": "試作編第2話",
+  "assets_dir": "C:/Users/YutoM/Videos/リール素材/試作編第2話",   // 省略可
+  "sources": ["G:/マイドライブ/50日企画素材/7 5 試作", ...],       // 素材を探すフォルダ
+  "segments": [
+    {"audio": "オープニング.m4a",
+     "clips": [{"file": "オープニング.mp4", "offset": 0}],
+     "telop": [{"at": 0.35, "lines": ["16日後に三宮に"], "y": 231}]}
+  ],
+  "se": [{"file": "ドーン.mp3", "seg": 7, "at": 3.1, "volume": 0.7}]
+}
+"""
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+
+US = 1_000_000
+CAPCUT_DRAFTS = os.path.expandvars(
+    r"%LOCALAPPDATA%\CapCut\User Data\Projects\com.lveditor.draft")
+SE_LIB = os.path.expandvars(r"%USERPROFILE%\Videos\リール素材\SE_CapCutライブラリ")
+STABLE_ROOT = os.path.expandvars(r"%USERPROFILE%\Videos\リール素材")
+
+# 録音のヒスノイズ除去（S/N +16dB・音声帯域は無傷。実測で確認済み）
+DENOISE = "highpass=f=85,afftdn=nr=16:nf=-42,lowpass=f=14000"
+
+WHITE = (1.0, 1.0, 1.0)
+YELLOW = (1.0, 0.84, 0.2)
+COLORS = {"white": WHITE, "yellow": YELLOW, "黄": YELLOW, "白": WHITE}
+
+
+def run(cmd):
+    # Windows の cp932 で ffmpeg の stderr が UnicodeDecodeError になるため必ず utf-8 指定
+    return subprocess.run(cmd, capture_output=True, text=True,
+                          encoding="utf-8", errors="replace")
+
+
+def die(msg):
+    print("エラー: " + msg)
+    sys.exit(1)
+
+
+# ── 素材を探す ──────────────────────────────────────────────
+def find_source(name, sources):
+    """素材名からフルパスを引く。sources の順に探し、見つからなければ再帰で探す。"""
+    if os.path.isabs(name) and os.path.exists(name):
+        return name
+    for d in sources:
+        p = os.path.join(d, name)
+        if os.path.exists(p):
+            return p
+    for d in sources:
+        for root, _dirs, files in os.walk(d):
+            if name in files:
+                return os.path.join(root, name)
+    p = os.path.join(SE_LIB, name)
+    if os.path.exists(p):
+        return p
+    return None
+
+
+def stage(name, sources, assets_dir):
+    """素材を安定パスへコピーする。
+
+    CapCut はドラフトを開くたびに元ファイルを読みにいくので、Drive（G:）や
+    scratchpad を参照させてはいけない（アンマウント・セッション終了で消える）。
+    """
+    dst = os.path.join(assets_dir, name)
+    if os.path.exists(dst):
+        return dst
+    src = find_source(name, sources)
+    if src is None:
+        die("素材が見つかりません: %s\n  探した場所: %s" % (name, "  ".join(sources)))
+    if name.lower().endswith((".m4a", ".mp3", ".wav")) and name.lower().endswith(".m4a"):
+        r = run(["ffmpeg", "-y", "-v", "error", "-i", src, "-af", DENOISE,
+                 "-c:a", "aac", "-b:a", "192k", "-ar", "48000", dst])
+        if r.returncode != 0:
+            shutil.copy2(src, dst)
+            print("  ノイズ除去に失敗したので原音をコピー: " + name)
+        else:
+            print("  ノイズ除去してコピー: " + name)
+        return dst
+    shutil.copy2(src, dst)
+    print("  コピー: " + name)
+    return dst
+
+
+# ── CapCut 国際版ネイティブ化 ───────────────────────────────
+def pick_template(explicit):
+    """骨格に使う既存ドラフトを選ぶ。
+
+    pyJianYingDraft は剪映（中国版）形式で書くため、CapCut国際版がそのままでは
+    「異常なパス」と言って開かない。CapCut 自身が作ったドラフトの外枠に
+    tracks/materials だけ差し込むと開けるようになる。
+    """
+    if explicit:
+        p = os.path.join(CAPCUT_DRAFTS, explicit, "draft_content.json")
+        if os.path.exists(p):
+            return p
+        die("指定された骨格ドラフトがありません: " + explicit)
+    best = None
+    for name in os.listdir(CAPCUT_DRAFTS):
+        p = os.path.join(CAPCUT_DRAFTS, name, "draft_content.json")
+        if not os.path.exists(p):
+            continue
+        try:
+            j = json.load(open(p, encoding="utf-8"))
+        except Exception:
+            continue
+        if (j.get("platform") or {}).get("app_source") != "cc":
+            continue
+        m = os.path.getmtime(p)
+        if best is None or m > best[0]:
+            best = (m, p)
+    if best is None:
+        die("CapCutが作ったドラフトが1つも見つかりません。\n"
+            "  CapCutを開いて、何でもいいので新しいプロジェクトを1つ作ってから、もう一度実行してください。")
+    return best[1]
+
+
+def normalize_paths(obj):
+    """パスを C:/... のスラッシュ区切りに直す。バックスラッシュだとCapCutが開けない。"""
+    if isinstance(obj, dict):
+        return {k: normalize_paths(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [normalize_paths(v) for v in obj]
+    if isinstance(obj, str) and re.match(r"^[A-Za-z]:\\", obj):
+        return obj.replace("\\", "/")
+    return obj
+
+
+def nativize(draft_dir, draft_name, template_path):
+    content_p = os.path.join(draft_dir, "draft_content.json")
+    meta_p = os.path.join(draft_dir, "draft_meta_info.json")
+    content = normalize_paths(json.load(open(content_p, encoding="utf-8")))
+    meta = normalize_paths(json.load(open(meta_p, encoding="utf-8")))
+
+    tpl = json.load(open(template_path, encoding="utf-8"))
+    native = dict(tpl)
+    native["id"] = content["id"]
+    native["duration"] = content["duration"]
+    native["fps"] = content["fps"]
+    native["canvas_config"] = {"ratio": "original", "width": 1080, "height": 1920,
+                               "background": None}
+    native["tracks"] = content["tracks"]
+    mats = dict(tpl["materials"])
+    for k in mats:
+        mats[k] = content["materials"].get(k, [])
+    # 骨格側に無い素材キー（texts等）も持ち込む
+    for k, v in content["materials"].items():
+        if k not in mats and v:
+            mats[k] = v
+    native["materials"] = mats
+    for k in ["cover", "static_cover_image_path", "retouch_cover", "path", "name",
+              "create_time", "update_time"]:
+        if k in content:
+            native[k] = content[k]
+
+    # allow_replace での再生成時に空で書かれることがあるので明示的に入れ直す
+    meta["tm_duration"] = native.get("duration", 0)
+    meta["draft_name"] = draft_name
+    meta["draft_root_path"] = CAPCUT_DRAFTS.replace("\\", "/")
+    meta["draft_fold_path"] = meta["draft_root_path"] + "/" + draft_name
+    json.dump(native, open(content_p, "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
+    json.dump(meta, open(meta_p, "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
+
+
+# ── 本体 ────────────────────────────────────────────────────
+def main(plan_path):
+    plan = json.load(open(plan_path, encoding="utf-8"))
+    name = plan["name"]
+    assets_dir = plan.get("assets_dir") or os.path.join(STABLE_ROOT, name)
+    sources = plan.get("sources") or []
+    segments = plan["segments"]
+    if not os.path.isdir(CAPCUT_DRAFTS):
+        die("CapCutのドラフト置き場が見つかりません: " + CAPCUT_DRAFTS +
+            "\n  CapCutをインストールして一度起動してください。")
+    os.makedirs(assets_dir, exist_ok=True)
+
+    print("素材をそろえます")
+    for seg in segments:
+        if seg.get("audio"):
+            stage(seg["audio"], sources, assets_dir)
+        for c in seg["clips"]:
+            stage(c["file"], sources, assets_dir)
+    for s in plan.get("se", []):
+        stage(s["file"], sources, assets_dir)
+
+    import pyJianYingDraft as d
+    from pyJianYingDraft import Timerange
+
+    folder = d.DraftFolder(CAPCUT_DRAFTS)
+    script = folder.create_draft(name, 1080, 1920, fps=30, allow_replace=True)
+    tv = script.append_track(d.TrackSpec(d.TrackType.video, "映像"))
+    ta = script.append_track(d.TrackSpec(d.TrackType.audio, "ナレーション"))
+    se_tracks = [script.append_track(d.TrackSpec(d.TrackType.audio, "効果音%d" % (i + 1)))
+                 for i in range(2)]
+    tx_tracks = [script.append_track(d.TrackSpec(d.TrackType.text, t))
+                 for t in ["テロップ上", "テロップ下", "テロップ予備1", "テロップ予備2"]]
+
+    print("タイムラインを組みます")
+    cursor = 0
+    starts, durs = [], []
+    for seg in segments:
+        starts.append(cursor)
+        clips = seg["clips"]
+
+        # 音声なしのセグメントは、1本目のクリップの尺をそのまま使う
+        if not seg.get("audio"):
+            vmat = d.VideoMaterial(os.path.join(assets_dir, clips[0]["file"]))
+            script.add_segment(d.VideoSegment(vmat, Timerange(cursor, vmat.duration),
+                                              source_timerange=Timerange(0, vmat.duration),
+                                              volume=1.0), tv)
+            durs.append(vmat.duration)
+            cursor += vmat.duration
+            continue
+
+        amat = d.AudioMaterial(os.path.join(assets_dir, seg["audio"]))
+        # 尺は ffprobe でなく AudioMaterial.duration を正とする（ms差で素材時長超過になる）
+        adur = amat.duration
+        script.add_segment(d.AudioSegment(amat, Timerange(cursor, adur)), ta)
+
+        mats = []
+        for c in clips:
+            vmat = d.VideoMaterial(os.path.join(assets_dir, c["file"]))
+            off = round(c.get("offset", 0) * US)
+            avail = max(300_000, vmat.duration - off - 50_000)
+            mats.append((vmat, off, avail, c.get("dur")))
+
+        fixed_total = sum(round(f * US) for _, _, _, f in mats if f is not None)
+        flex_n = sum(1 for m in mats if m[3] is None)
+        flex_each = max(300_000, (adur - fixed_total) // flex_n) if flex_n else 0
+
+        takes, remaining = [], adur
+        for vmat, off, avail, fixed in mats:
+            want = round(fixed * US) if fixed is not None else flex_each
+            take = min(want, avail)
+            takes.append([vmat, off, take, avail])
+            remaining -= take
+        if remaining > 0:
+            # 足りない分は最後のクリップを伸ばす。それでも足りなければ警告する
+            vmat, off, take, avail = takes[-1]
+            add = min(remaining, avail - take)
+            takes[-1][2] = take + add
+            if remaining - add > 50_000:
+                print("  警告: %s は映像が %.2f秒 足りません（CapCut上で静止延長するか素材を足してください）"
+                      % (seg["audio"], (remaining - add) / US))
+        elif remaining < 0:
+            # 固定尺の合計が音声尺を超えると次のセグメントと重なるので末尾を刈る
+            takes[-1][2] = max(100_000, takes[-1][2] + remaining)
+
+        t = cursor
+        for vmat, off, take, _ in takes:
+            if take <= 0:
+                continue
+            # 現場音はミュート（ナレーションと混ざる）
+            script.add_segment(d.VideoSegment(vmat, Timerange(t, take),
+                                              source_timerange=Timerange(off, take),
+                                              volume=0.0), tv)
+            t += take
+        durs.append(adur)
+        cursor += adur
+    total = cursor
+
+    print("テロップを入れます")
+    tx_end = [0] * len(tx_tracks)
+    for si, seg in enumerate(segments):
+        for card in seg.get("telop", []):
+            lines = card["lines"]
+            yc = card.get("y", 1340)
+            color = COLORS.get(card.get("color", "white"), WHITE)
+            S = starts[si] + round(card.get("at", 0) * US)
+            E = (starts[si] + round(card["until"] * US)) if card.get("until") is not None \
+                else starts[si] + durs[si]
+            n = len(lines)
+            for li, line in enumerate(lines):
+                y_px = yc + (li - (n - 1) / 2) * 130
+                # 画面中心が960px。transform_y は正が上なのでこの向きになる
+                seg_t = d.TextSegment(
+                    line, Timerange(S, E - S),
+                    style=d.TextStyle(size=13.0, bold=True, color=color, align=1),
+                    border=d.TextBorder(color=(0.0, 0.0, 0.0)),
+                    clip_settings=d.ClipSettings(transform_y=(960 - y_px) / 960))
+                # 同じトラック内で時間が重なると落ちるので、空いているトラックへ逃がす
+                pref = li if li < 2 else 0
+                order = [pref] + [x for x in range(len(tx_tracks)) if x != pref]
+                k = next((x for x in order if tx_end[x] <= S), None)
+                if k is None:
+                    die("テキストトラックが足りません（セグメント %d）" % si)
+                script.add_segment(seg_t, tx_tracks[k])
+                tx_end[k] = E
+
+    if plan.get("se"):
+        print("効果音を入れます")
+    se_end = [0] * len(se_tracks)
+    for s in plan.get("se", []):
+        at = starts[s["seg"]] + round(s.get("at", 0) * US)
+        amat = d.AudioMaterial(os.path.join(assets_dir, s["file"]))
+        k = next((i for i in range(len(se_tracks)) if se_end[i] <= at), None)
+        if k is None:
+            die("効果音トラックが足りません: %s" % s["file"])
+        script.add_segment(d.AudioSegment(amat, Timerange(at, amat.duration),
+                                          volume=s.get("volume", 0.6)), se_tracks[k])
+        se_end[k] = at + amat.duration
+
+    script.save()
+    nativize(os.path.join(CAPCUT_DRAFTS, name), name,
+             pick_template(plan.get("template_draft")))
+
+    print("")
+    print("できました: %s" % os.path.join(CAPCUT_DRAFTS, name))
+    print("長さ: %.2f秒" % (total / US))
+    print("CapCutを再起動すると一覧に出ます。")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        die("使い方: python make_draft.py plan.json")
+    main(sys.argv[1])
