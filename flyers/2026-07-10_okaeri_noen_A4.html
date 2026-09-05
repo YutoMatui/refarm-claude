@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>おかえり農園 とうもろこし収穫体験会チラシ（A4・シニア向け）</title>
+<style>
+  /* ====== 印刷設定：A4縦 ====== */
+  @page { size: 210mm 297mm; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #1E2A22;
+    --paper: #FBFAF6;
+    --green: #2F6B45;
+    --green-pale: #E8F1E4;
+    --corn: #E8B23A;
+    --warm: #C0533F;
+    --muted: #6d6d63;
+    --line: #E3E1D7;
+    --serif: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", serif;
+    --sans: "Yu Gothic", "YuGothic", "Hiragino Sans", "Meiryo", sans-serif;
+  }
+  body { width: 210mm; height: 297mm; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); overflow: hidden; }
+  .page { width: 210mm; height: 297mm; padding: 11mm 15mm 9mm; display: flex; flex-direction: column; }
+  .page > * { flex: none; }  /* 固定高さでも内容を圧縮しない（はみ出しは余白調整で解消する） */
+
+  /* ヘッダー */
+  .kicker { text-align: center; font-size: 12pt; letter-spacing: .22em; color: var(--green); font-weight: 700; }
+  h1 { font-family: var(--serif); text-align: center; font-size: 30pt; font-weight: 800; line-height: 1.25; margin-top: 2mm; }
+  h1 .accent { color: var(--green); }
+  .lead { text-align: center; font-family: var(--serif); font-size: 13pt; margin-top: 2mm; letter-spacing: .05em; }
+
+  /* イベントボックス */
+  .event { margin-top: 4mm; background: #fff; border: 2.5px solid var(--green); border-radius: 4mm; overflow: hidden; }
+  .event .head { background: var(--green); color: #fff; text-align: center; padding: 2.8mm; font-family: var(--serif); font-size: 18pt; font-weight: 700; letter-spacing: .06em; }
+  .event .head small { font-size: 11.5pt; }
+  .event .body { padding: 3.5mm 7mm; }
+  .row { display: flex; align-items: baseline; padding: 2mm 0; border-bottom: 1.5px dotted var(--line); }
+  .row:last-child { border-bottom: none; }
+  .row .label { flex: none; width: 34mm; background: var(--green-pale); color: var(--green); font-weight: 700; font-size: 12pt; text-align: center; border-radius: 999px; padding: 1.2mm 0; }
+  .row .val { padding-left: 5mm; font-size: 14.5pt; font-weight: 600; line-height: 1.5; }
+  .row .val small { font-size: 10.5pt; font-weight: 400; color: var(--muted); }
+  .free { color: var(--warm); font-weight: 800; }
+
+  /* たのしみ3つ */
+  .fun { display: flex; gap: 5mm; margin-top: 4mm; }
+  .fun .item { flex: 1; background: #fff; border: 1.5px solid var(--line); border-radius: 4mm; padding: 3.5mm 4mm; text-align: center; }
+  .fun .icon { font-size: 21pt; line-height: 1; }
+  .fun h3 { font-family: var(--serif); font-size: 13pt; margin-top: 2mm; color: var(--green); }
+  .fun p { font-size: 10pt; line-height: 1.55; margin-top: 1.5mm; text-align: left; }
+
+  /* メッセージ */
+  .message { margin-top: 4mm; text-align: center; }
+  .message p { font-family: var(--serif); font-size: 13.5pt; line-height: 1.7; }
+  .message .mk { background: linear-gradient(transparent 60%, #F3E4A8 60%); padding: 0 1mm; font-weight: 700; }
+
+  /* 安心ポイント */
+  .safety { margin-top: 4mm; background: var(--green-pale); border-radius: 4mm; padding: 3.5mm 6mm; }
+  .safety h4 { font-size: 12pt; color: var(--green); font-weight: 700; }
+  .safety ul { list-style: none; margin-top: 2mm; display: flex; flex-wrap: wrap; gap: 1.5mm 8mm; }
+  .safety li { font-size: 11pt; line-height: 1.7; padding-left: 6mm; position: relative; width: 44%; }
+  .safety li::before { content: "〇"; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+
+  /* 申込み */
+  .apply { margin-top: 4mm; background: #fff; border: 2.5px solid var(--warm); border-radius: 4mm; padding: 3.5mm 7mm; display: flex; align-items: center; gap: 7mm; }
+  .apply .txt { flex: 1; }
+  .apply h4 { font-family: var(--serif); font-size: 15pt; color: var(--warm); font-weight: 800; }
+  .apply .tel { font-size: 18pt; font-weight: 800; margin-top: 1.5mm; letter-spacing: .04em; }
+  .apply .tel .placeholder { font-size: 15pt; }
+  .apply p { font-size: 10pt; color: var(--muted); margin-top: 1.5mm; line-height: 1.55; }
+  .qr { flex: none; width: 27mm; height: 27mm; border: 2px dashed var(--muted); border-radius: 3mm; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 8.5pt; color: var(--muted); line-height: 1.6; background: #fff; }
+
+  .footer { margin-top: 2.5mm; text-align: center; font-size: 8.5pt; color: var(--muted); letter-spacing: .04em; line-height: 1.5; }
+  .placeholder { background: #FFF3B8; padding: 0 1.5mm; border-radius: 1mm; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="kicker">農家さんと、なかまと、畑で会いましょう</div>
+  <h1>おかえり<span class="accent">農園</span></h1>
+  <p class="lead">― 畑に、あなたの役割があります ―</p>
+
+  <div class="event">
+    <div class="head">とうもろこし収穫体験会 <small>（参加無料）</small></div>
+    <div class="body">
+      <div class="row"><div class="label">日にち</div><div class="val">7月30日（木）<span class="placeholder">午前9時〜12時（予定・要確認）</span></div></div>
+      <div class="row"><div class="label">場 所</div><div class="val">鶴田農園（神戸市西区）<br><small>集合場所・行き方はお申込みの際にご案内します。駐車場あり。</small></div></div>
+      <div class="row"><div class="label">参加費</div><div class="val"><span class="free">無料</span>　<small>採れたてのとうもろこしをお持ち帰りいただけます</small></div></div>
+      <div class="row"><div class="label">持ち物</div><div class="val"><small style="font-size:11.5pt;">帽子・タオル・飲み物・汚れてもよい服と靴</small></div></div>
+    </div>
+  </div>
+
+  <div class="fun">
+    <div class="item">
+      <div class="icon">🌽</div>
+      <h3>収穫のお手伝い</h3>
+      <p>朝採れのとうもろこしを農家さんと一緒に収穫。むずかしい作業はありません。</p>
+    </div>
+    <div class="item">
+      <div class="icon">🍵</div>
+      <h3>畑のお茶会</h3>
+      <p>作業のあとは、木かげでひと休み。農家さんや参加のみなさんとゆっくりおしゃべり。</p>
+    </div>
+    <div class="item">
+      <div class="icon">🎁</div>
+      <h3>おみやげつき</h3>
+      <p>自分で採ったとうもろこしをお持ち帰り。もぎたての甘さは格別です。</p>
+    </div>
+  </div>
+
+  <div class="message">
+    <p>「おかえり農園」は、農家さんのお手伝いをしながら<br><span class="mk">野菜と仲間と居場所</span>ができる、あたらしい畑の通い方。<br>あなたの手が、神戸の農業の力になります。</p>
+  </div>
+
+  <div class="safety">
+    <h4>はじめてでも、安心してご参加いただけます</h4>
+    <ul>
+      <li>作業は短時間・こまめに休憩します</li>
+      <li>日かげのお休み処と飲み物をご用意</li>
+      <li>大学生スタッフがおそばでお手伝い</li>
+      <li>道具はすべて貸出し。手ぶらでOK</li>
+    </ul>
+  </div>
+
+  <div class="apply">
+    <div class="txt">
+      <h4>お申込み・お問い合わせ（お電話でどうぞ）</h4>
+      <div class="tel">☎ <span class="placeholder">０００-００００-００００（要記入）</span></div>
+      <p>学生団体りふぁーむ（兵庫県立大学）担当：<span class="placeholder">〇〇（要記入）</span>／メール：refarmkobe@gmail.com<br>お名前とご連絡先をお伝えください。定員になり次第しめ切ります。</p>
+    </div>
+    <div class="qr">LINEでの<br>お申込みは<br>こちら<br>（QR貼付欄）</div>
+  </div>
+
+  <p class="footer">主催：学生団体りふぁーむ ｜ 協力：鶴田農園 ｜ 雨天時は中止し、お申込みの方へ前日までにご連絡します。</p>
+
+</div>
+</body>
+</html>

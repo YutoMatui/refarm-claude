@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>7/10 コープ出店チラシ v2（写真ヒーロー）</title>
+<style>
+  @page { size: 148mm 210mm; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root{
+    --ink:#241C17; --paper:#FCFAF6; --muted:#8C857F;
+    --coral:#E86A6F; --coral-dark:#C64F53;
+    --corn:#E8A93A; --tomato:#D8443C; --green:#5B7A46;
+    --line:#EBE6DF;
+    --serif:"Yu Mincho","YuMincho","Hiragino Mincho ProN",serif;
+    --sans:"Yu Gothic","YuGothic","Hiragino Sans","Meiryo",sans-serif;
+  }
+  body{ width:148mm; height:210mm; background:var(--paper); color:var(--ink); font-family:var(--sans); overflow:hidden; }
+  .page{ width:148mm; height:210mm; display:flex; flex-direction:column; position:relative; }
+
+  /* ===== ヒーロー（写真＋オーバーレイ） ===== */
+  .hero{ position:relative; height:96mm; overflow:hidden; }
+  .hero img{ width:100%; height:100%; object-fit:cover; object-position:center 42%; }
+  .hero::after{ content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(20,14,10,.42) 0%, rgba(20,14,10,0) 32%, rgba(20,14,10,.06) 62%, rgba(20,14,10,.72) 100%); }
+  .hero .top{ position:absolute; top:7mm; left:0; right:0; text-align:center; z-index:2; }
+  .hero .brandline{ display:inline-flex; align-items:center; gap:3mm; color:#fff; font-size:8pt; letter-spacing:.32em; font-weight:700; text-shadow:0 1px 6px rgba(0,0,0,.5); }
+  .hero .brandline::before,.hero .brandline::after{ content:""; width:9mm; height:1px; background:rgba(255,255,255,.7); }
+  .hero .title{ position:absolute; bottom:7mm; left:9mm; right:9mm; z-index:2; color:#fff; text-shadow:0 2px 14px rgba(0,0,0,.55); }
+  .hero .title h1{ font-family:var(--serif); font-size:27pt; font-weight:800; line-height:1.22; letter-spacing:.02em; }
+  .hero .title .sub{ font-family:var(--serif); font-size:10.5pt; margin-top:2.5mm; letter-spacing:.06em; color:rgba(255,255,255,.95); }
+
+  /* 日付リボン（ヒーローにまたがる） */
+  .ribbon{ position:absolute; top:34mm; right:0; z-index:3; background:var(--coral); color:#fff; padding:2.2mm 6mm 2.2mm 5mm;
+    box-shadow:0 3px 12px rgba(0,0,0,.25); border-radius:2mm 0 0 2mm; text-align:center; }
+  .ribbon .d{ font-size:14pt; font-weight:800; line-height:1.1; letter-spacing:.02em; }
+  .ribbon .t{ font-size:7.5pt; letter-spacing:.14em; margin-top:.5mm; }
+
+  /* ===== ボディ ===== */
+  .body{ flex:1; padding:5.5mm 9mm 5mm; display:flex; flex-direction:column; }
+
+  .place{ text-align:center; font-size:9.5pt; color:var(--ink); font-weight:600; }
+  .place .ph{ background:#FFF1B8; padding:0 1.5mm; border-radius:1mm; }
+  .place .sep{ color:var(--line); margin:0 2mm; }
+
+  /* 2種スープ */
+  .menu{ display:flex; gap:5mm; margin-top:4mm; }
+  .m{ flex:1; text-align:center; }
+  .m .chip{ display:inline-block; font-size:7.5pt; font-weight:700; letter-spacing:.08em; color:#fff; border-radius:999px; padding:.8mm 3.5mm; margin-bottom:1.8mm; }
+  .m.tomato .chip{ background:var(--tomato); }
+  .m.corn .chip{ background:var(--corn); }
+  .m h3{ font-family:var(--serif); font-size:13pt; font-weight:700; line-height:1.3; }
+  .m p{ font-size:8pt; color:#5c554e; line-height:1.6; margin-top:1.5mm; }
+  .m .price{ margin-top:1.5mm; font-family:var(--serif); font-size:12pt; font-weight:700; color:var(--coral-dark); }
+  .m .price .ph{ background:#FFF1B8; padding:0 1mm; border-radius:1mm; }
+  .m .price small{ font-family:var(--sans); font-size:6.5pt; font-weight:400; color:var(--muted); }
+  .divider-v{ width:1px; background:var(--line); }
+
+  /* わたしたち＋店予告（横並び） */
+  .strip{ display:flex; gap:5mm; margin-top:auto; align-items:stretch; }
+  .about{ flex:1.35; }
+  .about h4{ font-family:var(--serif); font-size:10.5pt; font-weight:700; position:relative; padding-left:4mm; }
+  .about h4::before{ content:""; position:absolute; left:0; top:1mm; width:2.2mm; height:2.2mm; border-radius:50%; background:var(--coral); }
+  .about p{ font-size:8pt; line-height:1.7; margin-top:1.8mm; color:#4a443e; }
+  .about b{ color:var(--coral-dark); font-weight:700; }
+  .shop{ flex:1; background:var(--ink); color:#fff; border-radius:3mm; padding:3.5mm; }
+  .shop .tag{ display:inline-block; background:var(--corn); color:#3a2c10; font-size:7.5pt; font-weight:800; border-radius:999px; padding:.6mm 3mm; letter-spacing:.05em; }
+  .shop .big{ font-family:var(--serif); font-size:11pt; font-weight:700; line-height:1.4; margin-top:2mm; }
+  .shop p{ font-size:7.3pt; line-height:1.6; margin-top:1.5mm; color:rgba(255,255,255,.82); }
+
+  /* LINE CTA */
+  .cta{ margin-top:4mm; background:#fff; border:1.6px solid var(--coral); border-radius:3mm; padding:3mm 4mm; display:flex; align-items:center; gap:4mm; box-shadow:0 3px 10px rgba(232,106,111,.12); }
+  .cta .txt{ flex:1; }
+  .cta .txt .big{ font-family:var(--serif); font-size:11pt; font-weight:700; line-height:1.35; }
+  .cta .txt .big em{ font-style:normal; color:var(--coral-dark); }
+  .cta .txt ul{ list-style:none; margin-top:1.5mm; }
+  .cta .txt li{ font-size:7.6pt; line-height:1.65; padding-left:3.6mm; position:relative; color:#4a443e; }
+  .cta .txt li::before{ content:""; position:absolute; left:0; top:1.4mm; width:1.6mm; height:1.6mm; border-radius:50%; background:var(--coral); }
+  .qr{ flex:none; width:21mm; height:21mm; border:1.4px dashed var(--muted); border-radius:2mm; display:flex; align-items:center; justify-content:center; text-align:center; font-size:6.2pt; color:var(--muted); line-height:1.5; }
+
+  .foot{ margin-top:3mm; text-align:center; font-size:6.3pt; color:var(--muted); letter-spacing:.05em; line-height:1.5; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <img src="img/soup_hero.png" alt="丸ごと野菜スープ">
+    <div class="top"><span class="brandline">KOBE VEGETABLE SOUP</span></div>
+    <div class="ribbon">
+      <div class="d">7/10<span style="font-size:8pt;">（金）</span></div>
+      <div class="t">1日限定</div>
+    </div>
+    <div class="title">
+      <h1>神戸の畑から、<br>まるごと一杯。</h1>
+      <div class="sub">― 規格外野菜と和出汁でつくる、丸ごと野菜スープ ―</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="place">
+      カレー食堂さんとのコラボ出店
+      <span class="sep">|</span><span class="ph">コープ〇〇店（要記入）</span>
+      <span class="sep">|</span><span class="ph">11:00〜14:00（要記入）</span>
+    </div>
+
+    <div class="menu">
+      <div class="m tomato">
+        <div class="chip">TOMATO</div>
+        <h3>完熟トマトの<br>丸ごとスープ</h3>
+        <p>神戸市西区の完熟トマトをまるごと。和出汁と合わせた、すっきりやさしい一杯。</p>
+        <div class="price"><span class="ph">¥〇〇〇</span> <small>税込</small></div>
+      </div>
+      <div class="divider-v"></div>
+      <div class="m corn">
+        <div class="chip">CORN</div>
+        <h3>とうもろこしの<br>まるごとスープ</h3>
+        <p>芯とひげまで出汁に。とうもろこしの甘さ全部入り、焼きコーンをのせて。</p>
+        <div class="price"><span class="ph">¥〇〇〇</span> <small>税込</small></div>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="about">
+        <h4>つくっているのは、大学生です</h4>
+        <p>学生団体<b>りふぁーむ</b>です。神戸市西区の農家さんと、おいしいのに"規格外"というだけで行き場を失う野菜を、<b>一杯のスープ</b>に変えて届けています。カレーのおともに、野菜を一杯どうぞ。</p>
+      </div>
+      <div class="shop">
+        <span class="tag">8月OPEN</span>
+        <div class="big">8/12、三宮に<br>お店を開きます</div>
+        <p>場所は8/5にLINEで先行発表。オープンまでの挑戦も毎週配信中。</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div class="txt">
+        <div class="big">公式LINEで、<em>オープンを一緒に</em>見守ってください</div>
+        <ul>
+          <li>お店の場所をどこよりも早くお知らせ</li>
+          <li>オープン特典・先行試食会のご案内</li>
+        </ul>
+      </div>
+      <div class="qr">公式LINE<br>QRコード<br>（貼付欄）</div>
+    </div>
+
+    <div class="foot">学生団体りふぁーむ（兵庫県立大学）｜refarmkobe@gmail.com　※乳製品・肉不使用。アレルゲンは店頭の表示シールをご確認ください。</div>
+  </div>
+
+</div>
+</body>
+</html>
