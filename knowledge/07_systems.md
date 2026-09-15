@@ -17,7 +17,7 @@
 - スタック：フロント React+Vite（Vercel、Root=client）／バック FastAPI+SQLAlchemy（Railway、Root=api、Dockerfile）／DB Railway PostgreSQL（スキーマ `soup`）／決済 Stripe／通知 LINE Messaging API／画像 Cloudinary（cloud `dcexzyhh7`、preset `soup_unsigned`）
 - 本番：フロント https://refarm-soup-app.vercel.app ／API https://refarm-soup-app-production.up.railway.app 。Vercelの `client/vercel.json` で `/api/*` をRailwayへ転送
 - LIFF ID `2010581177-PdAMan24`（Channel ID 2010581156）。リッチメニュー各セル＝ `https://liff.line.me/2010581177-PdAMan24/{menu|/|mypage|points}`
-- 顧客画面：C1ホーム→C2メニュー→C3商品詳細→C4カート→C5受け取り（スロット排他制御）→注文完了／C10健康レポート／`/subscribe`（朝ベジ会員 Stripe Billing）／`/mypage`（デジタル会員証・LINEログイン）
+- 顧客画面：C1ホーム→C2メニュー→C3商品詳細→C4カート→C5受け取り（スロット排他制御）→注文完了／C10健康レポート／~~`/subscribe`（朝ベジ会員 Stripe Billing）~~＝2026-09-15の朝ベジ会員廃止に伴い導線停止が必要（対応状況の記録なし）／`/mypage`（デジタル会員証・LINEログイン）
 - 管理画面 `/admin`：売上ダッシュボード・注文一覧・メニュー編集CRUD・サブスク会員数・**メニュー台帳／農家在庫**タブ・修正依頼・`/admin/deliveries`（ドライバー配達画面：拠点×時間で集約、Googleマップリンク）
 - 栄養の正＝`client/src/data/nutrition.js`（原則読み取り専用。食材マスタ・1食基準・合格ライン・調理ロス係数・PRESET_RECIPES）。seed生成＝`tools/gen_seed_nutrition.mjs`→`api` の `seed.py`
 - UIクラス：管理＝`adm-*`／消費者＝`screen`系。管理UIは横文字を使わない（「予約なし来店」等）
