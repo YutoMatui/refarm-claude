@@ -98,6 +98,7 @@
 | `/research` | 競合・市場・立地の調査→Notionにレポート |
 | `/leader-meeting-prep` | リーダー報告会ページを自動作成（月曜までに） |
 | `/weekly-team-report` | チーム週次まとめを Notion 記録から自動生成 |
+| `/minutes-wrapup` | 議事録から「決まったこと・残った議題・各自のタスク（表）」を整理してNotionに記入（会議直後） |
 | `dev-orchestra` スキル | システム開発（上位モデルが設計・レビュー、sonnetが実装） |
 
 ## 7. 用語集
