@@ -1,0 +1,75 @@
+<!-- VEGEONE 商大祭のぼり 600x1800mm（1:3・標準サイズ）
+     2026-10-30(金)/11-01(日) 商大祭 出店用。看板（決定済みビジュアル）と同じ焼き芋のキービジュアル。
+     書き出し: chrome --headless --no-pdf-header-footer --print-to-pdf=out.pdf file://$PWD/<this>.html
+     プレビューPNG: chrome --headless --window-size=2268,6804 --force-device-scale-factor=0.35 --screenshot=out.png ...
+     ルール: のぼりに価格・VEGEONEロゴは入れない（knowledge/04_brand_creative.md）。
+     安全マージン: 上40mm・左右25mm（チチ・縫製代）。 -->
+<!doctype html>
+<meta charset="utf-8">
+<title>VEGEONE 商大祭のぼり</title>
+<style>
+@font-face{font-family:'NSerifJP';font-weight:900;src:url('https://fonts.gstatic.com/s/notoserifjp/v34/xn71YHs72GKoTvER4Gn3b5eMRtWGkp6o7MjQ2byYPebA.ttf') format('truetype');}
+@font-face{font-family:'NSansJP';font-weight:900;src:url('https://fonts.gstatic.com/s/notosansjp/v57/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFLgk75s.ttf') format('truetype');}
+@font-face{font-family:'NSansJP';font-weight:700;src:url('https://fonts.gstatic.com/s/notosansjp/v57/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFPYk75s.ttf') format('truetype');}
+@page{size:600mm 1800mm;margin:0;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:600mm;height:1800mm;}
+.sheet{position:relative;width:600mm;height:1800mm;overflow:hidden;
+  background:
+   radial-gradient(120% 60% at 50% 18%, rgba(255,214,150,.42) 0%, rgba(255,190,110,0) 60%),
+   linear-gradient(180deg,#C07E33 0mm,#BB6B1E 330mm,#B4601A 760mm,#9D4A12 1240mm,#6E2E0B 1800mm);
+  font-family:'NSerifJP',serif;color:#fff;}
+/* 焼き芋のキービジュアル（看板と同一） */
+.hero{position:absolute;top:0;left:0;width:600mm;height:248mm;
+  background:url('img/nobori_shodaisai/kanban.jpg') center -245mm / 900mm auto no-repeat;
+  -webkit-mask-image:linear-gradient(180deg,#000 0mm,#000 150mm,rgba(0,0,0,0) 246mm);}
+.vig{position:absolute;top:0;left:0;width:600mm;height:248mm;
+  background:linear-gradient(90deg,rgba(150,70,15,.45) 0,rgba(150,70,15,0) 18%,rgba(150,70,15,0) 82%,rgba(150,70,15,.45) 100%);}
+/* 浮かぶ焼き芋（背景エコー） */
+.float{position:absolute;background:url('img/nobori_shodaisai/kanban.jpg') no-repeat;opacity:.13;filter:blur(2.2mm);
+  -webkit-mask-image:radial-gradient(closest-side,#000 55%,rgba(0,0,0,0) 100%);}
+.f1{top:880mm;left:-60mm;width:300mm;height:230mm;background-size:470mm auto;background-position:-40mm -118mm;transform:rotate(-14deg);}
+.f2{top:1420mm;right:-70mm;width:290mm;height:220mm;background-size:450mm auto;background-position:-150mm -112mm;transform:rotate(16deg);}
+/* 帯 */
+.band{position:absolute;left:50%;transform:translateX(-50%);
+  background:#F6EBD8;color:#7A3A10;font-family:'NSansJP',sans-serif;font-weight:700;
+  letter-spacing:.12em;text-align:center;border-radius:2mm;}
+.band.top{top:274mm;width:462mm;height:56mm;line-height:56mm;font-size:26mm;}
+/* 大見出し */
+.catch{position:absolute;top:352mm;left:0;width:600mm;text-align:center;
+  font-size:80mm;line-height:90mm;letter-spacing:.02em;font-weight:900;
+  text-shadow:0 0 14mm rgba(90,36,6,.55), 0 3mm 6mm rgba(90,36,6,.55);}
+/* 商品 */
+.shot{position:absolute;left:50%;transform:translateX(-50%);
+  filter:drop-shadow(0 8mm 14mm rgba(70,28,5,.45));}
+.soup{top:556mm;height:500mm;}
+.dai{top:1156mm;height:452mm;}
+.pname{position:absolute;left:0;width:600mm;text-align:center;font-weight:900;
+  font-size:62mm;line-height:72mm;letter-spacing:.03em;
+  text-shadow:0 0 12mm rgba(80,32,6,.6), 0 3mm 5mm rgba(80,32,6,.6);}
+.pname.a{top:1066mm;}
+.pname.b{top:1614mm;}
+.pname .y{color:#FFE2A6;}
+.sp{display:inline-block;width:22mm;}
+/* 下帯 */
+.foot{position:absolute;left:0;bottom:0;width:600mm;height:112mm;
+  background:linear-gradient(180deg,rgba(60,24,6,0) 0,rgba(60,24,6,.55) 38%,rgba(60,24,6,.72) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7mm;}
+.foot .en{font-family:'NSansJP',sans-serif;font-weight:700;font-size:21mm;letter-spacing:.42em;
+  color:#FFE9C9;text-indent:.42em;}
+.rule{width:220mm;height:.9mm;background:rgba(255,233,201,.65);}
+.foot .org{font-family:'NSansJP',sans-serif;font-weight:700;font-size:24mm;letter-spacing:.1em;color:#FFF3E2;}
+</style>
+<div class="sheet">
+  <div class="hero"></div><div class="vig"></div>
+  <div class="float f1"></div><div class="float f2"></div>
+  <div class="band top">100%　神戸産さつまいも</div>
+  <div class="catch">芋好き、<br>集まれ！</div>
+  <img class="shot soup" src="img/nobori_shodaisai/soup.png">
+  <div class="pname a">極<span class="sp"></span>焼き芋スープ</div>
+  <img class="shot dai" src="img/nobori_shodaisai/daigaku.png">
+  <div class="pname b">揚げたて大学芋</div>
+  <div class="foot">
+    <div class="org">学生団体りふぁーむ</div>
+  </div>
+</div>
