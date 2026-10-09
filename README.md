@@ -22,10 +22,14 @@ refarm-claude/
 │   ├── skills/dev-orchestra/
 │   ├── skills/reel-capcut/    ← 台本→CapCutドラフト（メンバーが動画を作る入口）
 │   ├── skills/reel-build/     ← 完成mp4まで焼き込むときの詳細手順
+│   ├── skills/creative-kv/    ← 販促ビジュアル（広告4:5・A型看板・のぼり）。手本画像・発注書・SETUP.md 入り
 │   └── settings.json      ← Notion等の許可設定（秘密情報なし）
 ├── slides/themes/         ← /refarm-slide のテーマCSS
 ├── rrep-slides/rrep.md    ← スライドの見本
 ├── flyers/                ← チラシの見本2枚
+├── vegeone_nobori/        ← のぼりの骨格（nobori_line.py）と差し替え版（nobori_imo_gold.py）。PDFはChrome headlessで出力
+├── vegeone_brand/build_print.py ← VEGEONEロゴをコードで描く部品
+├── fonts/                 ← のぼり用フォント（Zen Maru Gothic・Dela Gothic One、OFL）
 └── tools/generate_image.py ← Gemini画像生成（GEMINI_API_KEY が必要）
 ```
 

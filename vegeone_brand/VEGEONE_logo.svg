@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 71 71" width="71" height="71">
+  <style>@font-face{font-family:'FGill';src:url('file:///C:/Windows/Fonts/GILSANUB.TTF')format('truetype');}</style>
+  <circle cx="35.5" cy="35.5" r="32.5" fill="#000000"/>
+  <text x="35.5" y="32.590" text-anchor="middle" fill="#FFFFFF" font-family="'FGill'" font-size="15.6218">VEGE</text><text x="35.5" y="50.048" text-anchor="middle" fill="#FFFFFF" font-family="'FGill'" font-size="15.6218">ONE</text><circle cx="22.979" cy="44.229" r="5.916" fill="#FFFFFF"/><circle cx="22.979" cy="40.763" r="0.598" fill="#000000"/><path fill="#000000" d="M22.979,40.763 Q21.877,42.469 20.133,42.406 Q20.951,40.865 22.979,40.763 Z"/><path fill="#000000" d="M22.979,40.763 Q21.028,41.327 19.753,40.136 Q21.382,39.509 22.979,40.763 Z"/><path fill="#000000" d="M22.979,40.763 Q24.577,39.509 26.205,40.136 Q24.930,41.327 22.979,40.763 Z"/><path fill="#000000" d="M22.979,40.763 Q25.008,40.865 25.826,42.406 Q24.082,42.469 22.979,40.763 Z"/>
+</svg>

@@ -1,0 +1,51 @@
+{
+  "headline": "芋好き、集まれ！",
+  "date": "10.30 金 ・ 11.1 日",
+  "items": [
+    {
+      "name": "揚げたて大学芋",
+      "price": "¥300",
+      "desc": "ホイップかけ放題"
+    },
+    {
+      "name": "極 焼き芋スープ",
+      "price": "¥500",
+      "desc": "大学芋のせ・黒ごま煎餅"
+    }
+  ],
+  "offer": "2点で ¥100引き",
+  "sub": "100%神戸産さつまいも使用",
+  "brand": "VEGEONE",
+  "by": "学生団体りふぁーむ",
+  "nobori": {
+    "line1": "揚げたて大学芋",
+    "line2": "極 焼き芋スープ"
+  },
+  "shift_up": 60,
+  "shift_up_a2": 175,
+  "nobori_text": {
+    "main": "揚げたて大学芋",
+    "badge": "ホイップかけ放題",
+    "sub": "極 焼き芋スープ",
+    "price_line": "300円 ／ 500円",
+    "product_images": [
+      "key_imo.png",
+      "key_soup.png"
+    ]
+  },
+  "nobori_full": {
+    "script": "Daigaku-imo",
+    "main": "揚げたて大学芋",
+    "sub": "極 焼き芋スープ も あります",
+    "price_line": "300円 ／ 500円"
+  },
+  "viva": {
+    "en1": "LET'S EAT",
+    "en2": "SOUP!",
+    "script": "Let's eat soup!",
+    "ribbon": "神戸野菜の 焼き芋スープ",
+    "sticker": "揚げたて 大学芋も",
+    "box1": "厳選 神戸野菜",
+    "box2": "焼き芋スープ"
+  }
+}

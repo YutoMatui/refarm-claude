@@ -17,3 +17,12 @@ Thumbs.db
 .claude/skills/reel-capcut/scripts/_asset_index.json
 .claude/skills/reel-capcut/scripts/_API利用ログ_ローカル.jsonl
 .claude/skills/reel-capcut/scripts/_API利用ログ_設定.json
+
+# 販促ビジュアル（creative-kv／のぼり）の生成物は入れない。素材と骨格だけ共有する
+vegeone_nobori/*.html
+vegeone_nobori/*.pdf
+vegeone_nobori/*_full.png
+vegeone_nobori/*_preview.png
+vegeone_nobori/_cmp_*.png
+.claude/skills/creative-kv/scripts/*.jpg
+.claude/skills/creative-kv/scripts/*.png
