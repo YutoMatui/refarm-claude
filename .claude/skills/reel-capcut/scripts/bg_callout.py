@@ -17,7 +17,7 @@ import json, os, sys
 from PIL import Image, ImageDraw, ImageFilter
 import bg_common as B
 
-COL = {"cream": (255, 247, 230, 235), "gold": (255, 214, 140, 240), "brown": (90, 46, 14, 235), "terra": (176, 82, 30, 240)}
+COL = {"cream": (255, 247, 230, 235), "gold": (255, 214, 140, 240), "brown": (90, 46, 14, 235), "terra": (140, 52, 15, 240)}
 
 
 def main():

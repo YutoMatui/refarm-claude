@@ -66,7 +66,7 @@ YELLOW = (1.0, 0.84, 0.2)
 CREAM = (1.0, 0.97, 0.90)
 GOLD = (1.0, 0.84, 0.55)
 BROWN = (0.35, 0.18, 0.055)   # 明るい地（ベージュ）用の文字
-TERRA = (0.69, 0.32, 0.12)    # 明るい地での強調（焦げ茶の中の差し色）
+TERRA = (0.55, 0.20, 0.06)    # 明るい地での強調（焦げ茶の中の差し色）
 COLORS = {"white": WHITE, "yellow": YELLOW, "黄": YELLOW, "白": WHITE, "cream": CREAM, "gold": GOLD, "brown": BROWN, "terra": TERRA}
 
 # 様式：plan.json の "style" で切り替える
