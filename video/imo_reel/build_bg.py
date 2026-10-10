@@ -24,6 +24,7 @@ from common import key_green
 os.makedirs(os.path.join(HERE, "clips"), exist_ok=True)
 P = lambda *a: os.path.join(HERE, *a)
 os.environ.setdefault("REEL_FONT", "Yomogi-Regular.ttf")   # plan の "font" とそろえる
+os.environ.setdefault("REEL_INK", "brown")                 # 地が明るいので、カレンダーの文字は焦げ茶（plan の "color": "brown" とそろえる)
 LEAF_BOX = {"red": (95, 30, 305, 245), "orange": (535, 20, 750, 228), "yellow": (92, 242, 218, 365)}   # キービジュアル上の位置
 
 
@@ -106,8 +107,8 @@ def autumn_bg(dur=10.0):
             ang = amp * math.sin(2 * math.pi * t / per + ph)
             r = leaf.rotate(ang, resample=Image.BICUBIC, expand=True)
             im.alpha_composite(r, (int(cx - r.width / 2), int(cy - r.height / 2 + 6 * math.sin(2 * math.pi * t / per + ph + 1))))
-        # 1枚だけ、右上から左下へひらひら落ちる（ループのつなぎ目で消えるように最初と最後は透明）
-        p = t / dur; x = 860 - 380 * p + 60 * math.sin(p * 6 * math.pi); y = 260 + 1300 * p
+        # 1枚だけ、右端をひらひら落ちる（ループのつなぎ目で消えるように最初と最後は透明）
+        p = t / dur; x = 950 + 50 * math.sin(p * 6 * math.pi); y = 300 + 1300 * p   # 右端を落ちる（真ん中の中身に重ねない）
         f = fall.rotate(40 * math.sin(p * 5 * math.pi), resample=Image.BICUBIC, expand=True)
         f.putalpha(f.getchannel("A").point(lambda v: int(v * min(1, p * 6, (1 - p) * 6) * 0.9)))
         im.alpha_composite(f, (int(x), int(y)))

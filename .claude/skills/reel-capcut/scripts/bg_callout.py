@@ -11,13 +11,13 @@ spec.json の例（video/imo_reel/zukai.json）:
   anchor  = 元の商品画像（切り抜き後）の上の点 px。end = 画面上の線の終わり px（文字はこの外側に置く）
   side    = 文字を置く側（left / right）。終わりからさらに横へ短く線を引く（tail px）。at = 線が伸び始める秒
   bracket = [上y, 下y] を書くと、線の終わりに縦の括り線を引く（いくつかの名前を1つのまとまりとして示す）
-  color   = cream（既定）か gold。まとまりごとに色を変えて区別する
+  color   = cream（既定）・gold・brown・terra。まとまりごとに色を変えて区別する（明るい地なら brown／terra）
 """
 import json, os, sys
 from PIL import Image, ImageDraw, ImageFilter
 import bg_common as B
 
-COL = {"cream": (255, 247, 230, 235), "gold": (255, 214, 140, 240)}
+COL = {"cream": (255, 247, 230, 235), "gold": (255, 214, 140, 240), "brown": (90, 46, 14, 235), "terra": (176, 82, 30, 240)}
 
 
 def main():

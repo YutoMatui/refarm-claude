@@ -32,7 +32,7 @@ def main():
         im = B.bg_at(t); d = ImageDraw.Draw(im, "RGBA"); al = B.ease_out(min(1, t / 0.6))
         f = B.font_jp(40)
         for i, dn in enumerate(["月", "火", "水", "木", "金", "土", "日"]):
-            d.text((X0 + i * CW + CW / 2 - d.textlength(dn, font=f) / 2, Y0 - int(20 * (1 - al))), dn, font=f, fill=(255, 240, 220, int(230 * al)))
+            d.text((X0 + i * CW + CW / 2 - d.textlength(dn, font=f) / 2, Y0 - int(20 * (1 - al))), dn, font=f, fill=B.INK + (int(230 * al),))
         f = B.font_num(56); k = 0
         for wi, week in enumerate(calendar.Calendar(firstweekday=0).monthdayscalendar(a.year, a.month)):
             for di, day in enumerate(week):
@@ -43,15 +43,15 @@ def main():
                     k += 1; p = (t - (0.9 + (k - 1) * 0.35)) / 0.4
                     if p > 0:
                         rad = 56 * B.ease_back(min(1, p))
-                        d.ellipse([cx - rad, cy - rad, cx + rad, cy + rad], fill=B.CREAM)
+                        d.ellipse([cx - rad, cy - rad, cx + rad, cy + rad], fill=B.DOT)
                         if p > 0.5:
-                            d.text((cx - d.textlength(txt, font=f) / 2, cy - 36), txt, font=f, fill=B.BROWN)
+                            d.text((cx - d.textlength(txt, font=f) / 2, cy - 36), txt, font=f, fill=B.DOT_TXT)
                         continue
                 if day in CLOSED and t > t_last:
-                    d.text((cx - d.textlength(txt, font=f) / 2, cy - 36), txt, font=f, fill=(255, 240, 220, 120))
-                    d.line([(cx - 30, cy - 30), (cx + 30, cy + 30)], fill=(255, 240, 220, 150), width=4)
+                    d.text((cx - d.textlength(txt, font=f) / 2, cy - 36), txt, font=f, fill=B.INK + (120,))
+                    d.line([(cx - 30, cy - 30), (cx + 30, cy + 30)], fill=B.INK + (150,), width=4)
                     continue
-                d.text((cx - d.textlength(txt, font=f) / 2, cy - 36), txt, font=f, fill=(255, 240, 220, int(190 * al)))
+                d.text((cx - d.textlength(txt, font=f) / 2, cy - 36), txt, font=f, fill=B.INK + (int(190 * al),))
         if cup is not None:
             p = max(0, min(1, (t - (t_last + 0.2)) / 0.7))
             if p > 0:

@@ -65,7 +65,9 @@ WHITE = (1.0, 1.0, 1.0)
 YELLOW = (1.0, 0.84, 0.2)
 CREAM = (1.0, 0.97, 0.90)
 GOLD = (1.0, 0.84, 0.55)
-COLORS = {"white": WHITE, "yellow": YELLOW, "黄": YELLOW, "白": WHITE, "cream": CREAM, "gold": GOLD}
+BROWN = (0.35, 0.18, 0.055)   # 明るい地（ベージュ）用の文字
+TERRA = (0.69, 0.32, 0.12)    # 明るい地での強調（焦げ茶の中の差し色）
+COLORS = {"white": WHITE, "yellow": YELLOW, "黄": YELLOW, "白": WHITE, "cream": CREAM, "gold": GOLD, "brown": BROWN, "terra": TERRA}
 
 # 様式：plan.json の "style" で切り替える
 #   "pop"（既定）      = reference/style.md         50日企画の連載（企業フォント・白字黒縁・OP/ED・SE）
@@ -430,6 +432,8 @@ def build_layout(plan, assets_dir):
 def main(plan_path):
     plan = json.load(open(plan_path, encoding="utf-8"))
     set_style(plan.get("style", "pop")); set_font(plan.get("font"))
+    if plan.get("color") in COLORS:   # 地が明るいときは "color": "brown" で文字の既定色を変える
+        STYLE["default_color"] = COLORS[plan["color"]]
     print("様式: %s（reference/%s）" % (STYLE["name"], "style_restaurant.md" if STYLE["name"] == "restaurant" else "style.md"))
     name = plan["name"]
     assets_dir = plan.get("assets_dir") or os.path.join(STABLE_ROOT, name)

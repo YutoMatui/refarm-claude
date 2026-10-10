@@ -28,7 +28,7 @@
      ],
      "y": 440,
      "size": 10,
-     "color": "gold"
+     "color": "terra"
     }
    ]
   },
@@ -82,7 +82,7 @@
      "x": 965,
      "y": 1180,
      "size": 6,
-     "color": "gold"
+     "color": "terra"
     },
     {
      "at": 3.7,
@@ -92,7 +92,7 @@
      "x": 990,
      "y": 1365,
      "size": 6,
-     "color": "gold"
+     "color": "terra"
     },
     {
      "at": 4.5,
@@ -122,8 +122,8 @@
      "y": 1640,
      "size": 6,
      "colors": [
-      "cream",
-      "gold"
+      "brown",
+      "terra"
      ]
     }
    ]
@@ -150,7 +150,7 @@
      ],
      "y": 1720,
      "size": 13,
-     "color": "gold"
+     "color": "terra"
     }
    ]
   },
@@ -176,7 +176,7 @@
      ],
      "y": 390,
      "size": 10,
-     "color": "gold"
+     "color": "terra"
     },
     {
      "at": 4.4,
@@ -187,8 +187,8 @@
      "y": 1640,
      "size": 7,
      "colors": [
-      "cream",
-      "gold"
+      "brown",
+      "terra"
      ]
     }
    ]
@@ -240,7 +240,7 @@
      ],
      "y": 1620,
      "size": 7,
-     "color": "gold"
+     "color": "terra"
     }
    ]
   },
@@ -266,7 +266,7 @@
      ],
      "y": 1380,
      "size": 6,
-     "color": "gold"
+     "color": "terra"
     },
     {
      "at": 1.6,
@@ -282,5 +282,6 @@
  "font": {
   "file": "Yomogi-Regular.ttf",
   "title": "Yomogi"
- }
+ },
+ "color": "brown"
 }

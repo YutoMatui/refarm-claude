@@ -7,6 +7,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
 sys.path.insert(0, os.path.join(REPO, ".claude", "skills", "creative-kv", "scripts"))
 CREAM = (255, 247, 230, 255); GOLD = (255, 214, 140, 255); BROWN = (70, 28, 8, 255)
+# 地が明るい（ベージュ）ときは REEL_INK=brown。カレンダーの曜日・数字を焦げ茶に、営業日の丸をテラコッタにする
+DARK_INK = os.environ.get("REEL_INK", "") == "brown"
+INK = (90, 46, 14) if DARK_INK else (255, 240, 220)
+DOT, DOT_TXT = ((176, 82, 30, 255), CREAM) if DARK_INK else (CREAM, BROWN)
 
 
 def font_num(size):

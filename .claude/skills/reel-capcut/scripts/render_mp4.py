@@ -61,6 +61,8 @@ def rgb(c):
 def main(plan_path, out_path):
     plan = md.json.load(open(plan_path, encoding="utf-8"))
     md.set_style(plan.get("style", "pop")); md.set_font(plan.get("font"))
+    if plan.get("color") in md.COLORS:
+        md.STYLE["default_color"] = md.COLORS[plan["color"]]
     name = plan["name"]
     assets_dir = plan.get("assets_dir") or os.path.join(md.STABLE_ROOT, name)
     md.check_plan(plan)
