@@ -16,7 +16,8 @@ def font_num(size):
 
 
 def font_jp(size):
-    for p in [os.path.join(REPO, "fonts", "ShipporiMincho-Bold.ttf"), "C:/Windows/Fonts/HGRME.TTC", "C:/Windows/Fonts/yumindb.ttf"]:
+    """環境変数 REEL_FONT（fonts/ のファイル名）があれば、それを優先（plan の "font" とそろえる）"""
+    for p in [os.path.join(REPO, "fonts", os.environ.get("REEL_FONT", "-")),os.path.join(REPO, "fonts", "ShipporiMincho-Bold.ttf"), "C:/Windows/Fonts/HGRME.TTC", "C:/Windows/Fonts/yumindb.ttf"]:
         if os.path.exists(p):
             return ImageFont.truetype(p, size)
 
@@ -41,6 +42,35 @@ def gold_bg(phase=0.0):
     cy = 1000 + int(60 * math.sin(phase))
     gd.ellipse([-200, cy - 500, W + 200, cy + 500], fill=(243, 184, 96, 110))
     return Image.alpha_composite(bg, glow.filter(ImageFilter.GaussianBlur(160)))
+
+
+_BG = {}
+
+
+def bg_at(t):
+    """t 秒の背景。環境変数 REEL_BG に画像か動画（秋の背景など）があればそれ、無ければ金色グラデ。
+    画像はゆっくり寄る（動きを出す）。動画は 1080×1920 に切ってループ。"""
+    src = os.environ.get("REEL_BG", "")
+    if not src or not os.path.exists(src):
+        if "gold" not in _BG:
+            _BG["gold"] = gold_bg()
+        return _BG["gold"].copy()
+    if src.lower().endswith((".mp4", ".mov")):
+        if "frames" not in _BG:
+            tmp = os.path.join(os.path.dirname(os.path.abspath(src)), "_frames_bgsrc")
+            shutil.rmtree(tmp, ignore_errors=True); os.makedirs(tmp)
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-vf",
+                            "scale=%d:%d:force_original_aspect_ratio=increase,crop=%d:%d,fps=%d" % (W, H, W, H, FPS),
+                            os.path.join(tmp, "f%04d.png")], check=True)
+            _BG["frames"] = [os.path.join(tmp, f) for f in sorted(os.listdir(tmp))]
+        fr = _BG["frames"]
+        return Image.open(fr[int(t * FPS) % len(fr)]).convert("RGBA")
+    if "img" not in _BG:
+        from common import fit
+        _BG["img"] = fit(Image.open(src).convert("RGB"), W, H)
+    z = 1 + 0.03 * min(1, t / 8)
+    im = _BG["img"]; w, h = int(W * z), int(H * z)
+    return im.resize((w, h), Image.LANCZOS).crop(((w - W) // 2, (h - H) // 2, (w - W) // 2 + W, (h - H) // 2 + H)).convert("RGBA")
 
 
 def render(fn, dur, out, name="bg"):

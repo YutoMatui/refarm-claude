@@ -81,6 +81,12 @@ STYLES = {
 STYLE = {}
 def set_style(name):
     STYLE.clear(); STYLE.update(STYLES.get(name or "pop", STYLES["pop"])); STYLE["name"] = name if name in STYLES else "pop"
+
+
+def set_font(font):
+    """plan の "font": {"file": "KleeOne-SemiBold.ttf", "title": "Klee One"} で様式のフォントだけ差し替える（file はリポジトリの fonts/ に置く）"""
+    if font:
+        STYLE.update({"ttf": os.path.join(_REPO, "fonts", font["file"]), "font_id": "", "font_title": font.get("title", font["file"])})
 set_style("pop")
 
 
@@ -423,7 +429,7 @@ def build_layout(plan, assets_dir):
 # ── 本体 ────────────────────────────────────────────────────
 def main(plan_path):
     plan = json.load(open(plan_path, encoding="utf-8"))
-    set_style(plan.get("style", "pop"))
+    set_style(plan.get("style", "pop")); set_font(plan.get("font"))
     print("様式: %s（reference/%s）" % (STYLE["name"], "style_restaurant.md" if STYLE["name"] == "restaurant" else "style.md"))
     name = plan["name"]
     assets_dir = plan.get("assets_dir") or os.path.join(STABLE_ROOT, name)

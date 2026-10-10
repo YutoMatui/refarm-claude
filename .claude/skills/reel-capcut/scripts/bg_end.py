@@ -17,7 +17,7 @@ def main():
     WM = WM.resize((B.W - 160, int(WM.height * (B.W - 160) / WM.width)), Image.LANCZOS)
 
     def frame(t):
-        im = B.gold_bg(t * 0.8); p = B.ease_out(min(1, t / 1.0))
+        im = B.bg_at(t); p = B.ease_out(min(1, t / 1.0))
         wm = WM.copy(); wm.putalpha(wm.getchannel("A").point(lambda v: int(v * p)))
         im.alpha_composite(wm, (80, 760 + int(30 * (1 - p))))
         return im

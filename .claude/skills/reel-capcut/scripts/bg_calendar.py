@@ -29,7 +29,7 @@ def main():
     t_last = 0.9 + len(OPEN) * 0.35
 
     def frame(t):
-        im = BG.copy(); d = ImageDraw.Draw(im, "RGBA"); al = B.ease_out(min(1, t / 0.6))
+        im = B.bg_at(t); d = ImageDraw.Draw(im, "RGBA"); al = B.ease_out(min(1, t / 0.6))
         f = B.font_jp(40)
         for i, dn in enumerate(["月", "火", "水", "木", "金", "土", "日"]):
             d.text((X0 + i * CW + CW / 2 - d.textlength(dn, font=f) / 2, Y0 - int(20 * (1 - al))), dn, font=f, fill=(255, 240, 220, int(230 * al)))
