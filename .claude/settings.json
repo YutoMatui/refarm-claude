@@ -16,6 +16,7 @@
       "Bash(git diff *)",
       "Bash(git pull)",
       "Bash(python .claude/skills/creative-kv/scripts/*)",
+      "Bash(python .claude/skills/reel-capcut/scripts/*)",
       "Bash(python vegeone_nobori/*)",
       "Bash(python tools/generate_image.py *)"
     ]

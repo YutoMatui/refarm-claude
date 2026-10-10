@@ -102,7 +102,7 @@
 | `/weekly-team-report` | チーム週次まとめを Notion 記録から自動生成 |
 | `dev-orchestra` スキル | システム開発（上位モデルが設計・レビュー、sonnetが実装） |
 | `creative-kv` スキル | 販促ビジュアル（SNS用4:5・A型看板A2・のぼり600×1800）。手本＋実物写真→Gemini生成→文字はコード。のぼりは `vegeone_nobori/` の骨格を差し替える。別PCの準備は `.claude/skills/creative-kv/SETUP.md` |
-| `reel-capcut` スキル | Notionの台本→CapCutドラフト（動画）。様式は2つ：`pop`（50日企画の連載）／`restaurant`（店のメニュー・営業日・行き方。明朝・縁なし・OP/EDなし） |
+| `reel-capcut` スキル | 動画づくりの入口。呼ばれたら作り方を説明して最初に決めることを問いかける（発注書 `templates/brief.md`）。様式は2つ：`pop`（50日企画の連載）／`restaurant`（店のメニュー・営業日・行き方。背景動画→CapCut→文字は後入れ。明朝・縁なし・OP/EDなし） |
 
 ## 7. 用語集
 

@@ -237,6 +237,21 @@ ffmpeg -i 音声.wav -af "atrim=start=2.20,asetpts=N/SR/TB" 音声_修正.wav   
 
 そのうえで本人がやること: カットの尺の微調整・トランジション・エフェクト。
 
+## 店の動画（様式 restaurant）の手順（2026-10-10 に確立。実例＝`reference/example_2026-10_eigyobi.md`）
+
+上の「手順」は語り入りの連載（pop）向け。店の告知・メニュー・行き方は、こちらの順で作る。
+
+1. 最初の問いかけで答えをそろえ、原稿の表（秒・映像・文字）を書いて見せる。1画面の文字は2行まで
+2. **背景動画（文字なし）をカットごとに用意する。** 置き場は `video/〈企画名〉/clips/`
+   - 実写がある → `python scripts/prep_clip.py 入力.MOV clips/03_xxx.mp4 --ss 開始秒 --t 長さ`（縦1080×1920にそろえ、無音なら無音トラックを足す）
+   - 動きのない絵（キービジュアル・商品写真）→ `python scripts/prep_clip.py --crop 元絵.png clips/src_916.png` で9:16に切ってから `python scripts/gen_clip.py 実行 clips/01_xxx.mp4 clips/src_916.png "動きの指示"`（8秒・約180円・月上限あり）。動かすものは1つ＋湯気くらいに絞る。料理の見た目は変えない。無料でやるなら Dreamina か CapCut の AI動画生成（Seedance 2.0）に同じ絵と指示を手作業で
+   - 営業日カレンダー → `python scripts/bg_calendar.py --year 2026 --month 11 --open 5,6,12 --closed 10 --cup 商品のグリーンバック.png --out clips/02_calendar.mp4`
+   - 最後の1枚（ロゴ）→ `python scripts/bg_end.py --out clips/05_end.mp4`
+3. `templates/plan.restaurant.example.json` を `video/〈企画名〉/plan.json` にコピーし、`name`・`sources`・クリップの並び・文字を書き換える（`"style": "restaurant"` のまま。音声なしのセグメントは1本目のクリップの尺がそのまま使われる）
+4. `python scripts/make_draft.py video/〈企画名〉/plan.json` → CapCut を再起動してドラフトを開く。確認用 mp4 は `python scripts/render_mp4.py video/〈企画名〉/plan.json 出力.mp4`
+5. メンバーに渡すこと：ドラフト名／フォントが既定ゴシックなら全選択→「Shippori Mincho」／つなぎ目は0.3秒のディゾルブ／BGMは小さく（OpenTracks）／現場の音は残す／1080pで書き出し
+6. 完成品と背景動画は Drive `50日企画素材/完成動画/` へ。リポジトリには plan とスクリプトだけ（mp4・png は .gitignore 済み）
+
 ## 作り直しの注意
 
 **ドラフトの上書きは、本人がCapCut上で加えた編集を全部消す。**
