@@ -1,0 +1,46 @@
+{
+ "name": "10月の新メニュー_極焼きいもスープ",
+ "style": "restaurant",
+ "sources": [
+  "C:/Users/YutoM/refarm-cc-company/refarm-claude/video/imo_reel/clips",
+  "C:/Users/YutoM/refarm-cc-company/refarm-claude/video/cal_reel/clips"
+ ],
+ "segments": [
+  {"clips": [{"file": "01_spoon_drip.mp4"}],
+   "telop": [
+    {"at": 0.4, "lines": ["10月の新メニュー"], "y": 300, "size": 11},
+    {"at": 0.9, "lines": ["極 焼きいもスープ"], "y": 440, "size": 9, "color": "gold"}]},
+  {"clips": [{"file": "02_zukai.mp4"}],
+   "telop": [
+    {"at": 0.3, "lines": ["スープの中身"], "y": 300, "size": 9},
+    {"at": 1.6, "lines": ["さつまいも"], "x": 920, "y": 700, "size": 6},
+    {"at": 1.6, "lines": ["ヘルシーファーム"], "x": 920, "y": 770, "size": 4.5, "color": "gold"},
+    {"at": 2.4, "lines": ["かぼちゃ"], "x": 160, "y": 720, "size": 6},
+    {"at": 3.2, "lines": ["たまねぎ"], "x": 105, "y": 1020, "size": 6},
+    {"at": 4.2, "lines": ["具に 枝豆"], "x": 935, "y": 1200, "size": 6},
+    {"at": 5.0, "lines": ["底に もち麦"], "x": 935, "y": 1500, "size": 6},
+    {"at": 5.8, "lines": ["野菜はすべて兵庫県産"], "y": 1720, "size": 7}]},
+  {"clips": [{"file": "03_cup_close.mp4"}],
+   "telop": [
+    {"at": 0.3, "lines": ["大学芋と黒ごませんべいをのせて"], "y": 1560, "size": 7},
+    {"at": 0.9, "lines": ["¥600"], "y": 1700, "size": 10, "color": "gold"}]},
+  {"clips": [{"file": "04_calendar.mp4"}],
+   "telop": [
+    {"at": 0.2, "lines": ["10月は 月・火・木"], "y": 250, "size": 12},
+    {"at": 0.6, "lines": ["11:00 – 14:00"], "y": 390, "size": 10, "color": "gold"},
+    {"at": 4.4, "lines": ["20日（火）はお休み", "12日（祝）は営業します"], "y": 1445, "size": 7, "colors": ["cream", "gold"]}]},
+  {"clips": [{"file": "03a_person_wave.mp4"}],
+   "telop": [
+    {"at": 0.2, "lines": ["場所は 加納町3-11-8 の2階"], "y": 300, "size": 10},
+    {"at": 0.8, "lines": ["黒い階段を上がってください"], "y": 1620, "size": 7}]},
+  {"clips": [{"file": "03b_gaikan.mp4"}],
+   "telop": [
+    {"at": 0.2, "lines": ["JR三ノ宮駅から徒歩10分"], "y": 300, "size": 10},
+    {"at": 0.8, "lines": ["Googleマップで「VEGEONE」"], "y": 1620, "size": 7, "color": "gold"}]},
+  {"clips": [{"file": "06_end.mp4"}],
+   "telop": [
+    {"at": 0.8, "lines": ["詳しくは公式LINEで"], "y": 1250, "size": 9},
+    {"at": 1.2, "lines": ["プロフィールのリンクから"], "y": 1380, "size": 6, "color": "gold"},
+    {"at": 1.6, "lines": ["@refarm_soup"], "y": 1500, "size": 7}]}
+ ]
+}

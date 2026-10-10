@@ -22,7 +22,7 @@ plan.json の形（詳しくは SKILL.md）:
 }
 
 telop カードの任意項目:
-  "until": 終わり秒（省略=セグメント末尾）  "y": 中心px（既定1340）  "size": CapCut上の文字サイズ（既定13）
+  "until": 終わり秒（省略=セグメント末尾）  "y": 中心px（既定1340）  "x": 横の中心px（既定540＝中央。図解のラベル用）  "size": CapCut上の文字サイズ（既定13）
   "color": "white"/"yellow"（カード全体）  "colors": ["white","yellow"]（行ごと。color より優先）
 """
 import json
@@ -409,7 +409,7 @@ def build_layout(plan, assets_dir):
             for li, line in enumerate(lines):
                 cname = (per_line[li] if per_line and li < len(per_line) else card.get("color", ""))
                 L["telop"].append({"text": line, "start": S, "dur": E - S,
-                                   "y": yc + (li - (n - 1) / 2) * step, "size": size,
+                                   "y": yc + (li - (n - 1) / 2) * step, "x": card.get("x", 540), "size": size,
                                    "color": COLORS.get(cname, STYLE["default_color"]), "line": li})
 
     for s in plan.get("se", []):
@@ -466,7 +466,7 @@ def main(plan_path):
             style=d.TextStyle(size=t["size"], bold=STYLE["border"], color=t["color"], align=1),
             border=(d.TextBorder(color=(0.0, 0.0, 0.0)) if STYLE["border"] else None),
             # 画面中心が960px。transform_y は正が上なのでこの向きになる
-            clip_settings=d.ClipSettings(transform_y=(960 - t["y"]) / 960))
+            clip_settings=d.ClipSettings(transform_x=(t["x"] - 540) / 540, transform_y=(960 - t["y"]) / 960))
         # 同じトラック内で時間が重なると落ちるので、空いているトラックへ逃がす
         pref = t["line"] if t["line"] < 2 else 0
         order = [pref] + [x for x in range(len(tx_tracks)) if x != pref]

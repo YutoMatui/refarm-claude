@@ -120,8 +120,8 @@ def main(plan_path, out_path):
         chain.append(
             ("drawtext=textfile='%s':fontfile='%s':fontsize=%d:fontcolor=%s:"
              + ("borderw=12:bordercolor=black:" if md.STYLE.get("border", True) else "shadowx=0:shadowy=4:shadowcolor=black@0.45:")
-             + "x=(w-tw)/2:y=%d-th/2:enable='between(t,%.3f,%.3f)'")
-            % (esc_path(tf), esc_path(ttf), fs, rgb(t["color"]), int(round(t["y"])), s, e))
+             + "x=%d-tw/2:y=%d-th/2:enable='between(t,%.3f,%.3f)'")
+            % (esc_path(tf), esc_path(ttf), fs, rgb(t["color"]), int(round(t.get("x", 540))), int(round(t["y"])), s, e))
     vchain = ",".join(chain) if chain else "null"
     vchain += ",fade=t=in:st=0:d=0.5,fade=t=out:st=%.3f:d=0.7" % max(0.0, total - 0.7)
 
