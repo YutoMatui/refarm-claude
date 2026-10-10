@@ -117,12 +117,32 @@ def autumn_bg(dur=10.0):
 
 
 def cup_closeup():
-    """カップにゆっくり寄る 3.5秒"""
+    """カップにゆっくり寄る 3.5秒。秋らしく：カップの後ろに夕日のような光、まわりにもみじ（後ろ・足もと）がゆらゆら"""
     cup = cup_cut()
+    glow = Image.new("RGBA", (B.W, B.H), (0, 0, 0, 0))
+    ImageDraw.Draw(glow).ellipse([90, 330, 990, 1230], fill=(255, 196, 110, 150))
+    glow = glow.filter(ImageFilter.GaussianBlur(120))
+
+    def leaf(n, w, flip=False):
+        im = Image.open(P("src", "leaf_%s.png" % n)); im = im.resize((w, int(im.height * w / im.width)), Image.LANCZOS)
+        return im.transpose(Image.FLIP_LEFT_RIGHT) if flip else im
+    # (葉, 幅, 中心x, 中心y, 揺れ°, 周期, 位相, 反転)  back＝カップの後ろ、front＝足もと（値段の文字 y1500〜 にはかけない）
+    back = [(leaf("red", 210), 150, 640, 7, 3.2, 0.3), (leaf("orange", 200, True), 935, 560, 6, 2.8, 1.7),
+            (leaf("yellow", 130), 300, 330, 9, 2.5, 0.9), (leaf("orange", 160), 120, 1060, 6, 3.0, 2.4),
+            (leaf("red", 150, True), 975, 1010, 7, 3.4, 1.1)]
+    front = [(leaf("yellow", 140, True), 250, 1380, 5, 2.9, 0.5), (leaf("red", 130), 840, 1400, 5, 3.1, 2.0)]
+
+    def put(im, items, t):
+        for lf, cx, cy, amp, per, ph in items:
+            r = lf.rotate(amp * math.sin(2 * math.pi * t / per + ph), resample=Image.BICUBIC, expand=True)
+            im.alpha_composite(r, (int(cx - r.width / 2), int(cy - r.height / 2)))
 
     def frame(t):
         k = 760 + 140 * B.ease_out(min(1, t / 3.5)); c = cup.resize((int(k), int(cup.height * k / cup.width)), Image.LANCZOS)
-        im = B.bg_at(t); im.alpha_composite(c, ((B.W - c.width) // 2, 880 - int(c.height * 0.5))); return im  # 下の文字の場所を空ける
+        im = B.bg_at(t); im.alpha_composite(glow); put(im, back, t)
+        im.alpha_composite(c, ((B.W - c.width) // 2, 880 - int(c.height * 0.5)))  # 下の文字の場所を空ける
+        put(im, front, t)
+        return im
     B.render(frame, 3.5, P("clips", "03_cup_close.mp4"), "close")
 
 
