@@ -42,7 +42,7 @@
     {
      "at": 0.3,
      "lines": [
-      "スープの中身"
+      "こだわりの野菜"
      ],
      "y": 300,
      "size": 9
@@ -280,7 +280,7 @@
   }
  ],
  "font": {
-  "file": "KleeOne-SemiBold.ttf",
-  "title": "Klee One"
+  "file": "Yomogi-Regular.ttf",
+  "title": "Yomogi"
  }
 }
