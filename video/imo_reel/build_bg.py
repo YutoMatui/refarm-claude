@@ -4,7 +4,7 @@
   python build_bg.py
     src/01_imo_916.png … 最初のカットの元絵（商大祭キービジュアルから大学芋・ソフトクリームを消し、カップを前に置く）
     src/leaf_*.png     … キービジュアルのもみじを切り抜いたもの
-    src/autumn_bg.mp4  … 金色の地にもみじがゆらゆら揺れる秋の背景（2〜6カットの地。無料）
+    src/autumn_bg.mp4  … 金色の地にもみじがゆらゆら揺れる秋の背景（2・3・5カットの地。無料）
     clips/02〜06       … 図解・寄り・カレンダー・ロゴ
   01 を動かすのだけ gen_clip.py（約180円・要承認）。05 店の前・外観は video/cal_reel/clips/03a・03b を使い回す
 
@@ -57,7 +57,8 @@ def opening_still(Z=1.45, OY=120, CW=980, BY=1800):
     前にカップを大きく置く（消した跡はカップの後ろに隠れる位置にしてある）"""
     kv = np.array(Image.open(P("src", "kv_autumn.jpg")).convert("RGB"))
     mask = np.zeros(kv.shape[:2], np.uint8)
-    for r in [(115, 690, 515, 1095), (200, 505, 395, 760), (430, 495, 845, 995)]:   # 器・ソフトクリーム・元のカップ
+    # 器・ソフトクリーム・元のカップ／上のもみじ3枚／見出しの所を通る蜜の筋（文字と絵を重ねない）
+    for r in [(115, 690, 515, 1095), (200, 505, 395, 760), (430, 495, 845, 995)] + list(LEAF_BOX.values()) + [(436, 0, 466, 245)]:
         cv2.rectangle(mask, r[:2], r[2:], 255, -1)
     clean = cv2.inpaint(kv, mask, 25, cv2.INPAINT_TELEA)
     W, H = B.W, B.H; kw, kh = int(896 * Z), int(1152 * Z)
@@ -77,20 +78,25 @@ def opening_still(Z=1.45, OY=120, CW=980, BY=1800):
     sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(sh).ellipse([540 - CW * 0.42, BY - 50, 540 + CW * 0.46, BY + 30], fill=(80, 35, 5, 130))
     im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(30))); im.alpha_composite(cup, (540 - CW // 2, BY - cup.height))
+    # もみじは見出し（y 230〜470）にかからない隅へ置き直す
+    for n, w, x, y in [("red", 250, -10, 10), ("orange", 230, 850, 20), ("yellow", 120, 20, 520)]:
+        lf = Image.open(P("src", "leaf_%s.png" % n)); lf = lf.resize((w, int(lf.height * w / lf.width)), Image.LANCZOS)
+        im.alpha_composite(lf, (x, y))
     im.convert("RGB").save(P("src", "01_imo_916.png")); print("できました: src/01_imo_916.png")
 
 
 def autumn_bg(dur=10.0):
-    """金色の地に、キービジュアルのもみじが四隅でゆらゆら揺れ、右から1枚ゆっくり落ちる（2〜6カットの地）"""
+    """金色の地に、キービジュアルのもみじが四隅でゆらゆら揺れ、右から1枚ゆっくり落ちる（2・3・5カットの地）"""
     L = {n: Image.open(P("src", "leaf_%s.png" % n)) for n in LEAF_BOX}
 
     def sized(n, w, flip=False):
         im = L[n].resize((w, int(L[n].height * w / L[n].width)), Image.LANCZOS)
         return im.transpose(Image.FLIP_LEFT_RIGHT) if flip else im
     # (葉, 幅, 中心x, 中心y, 揺れ幅°, 周期秒, 位相, 左右反転)
-    spec = [("red", 340, 130, 170, 6, 3.4, 0.0, False), ("orange", 310, 960, 150, 5, 3.0, 1.3, False),
-            ("yellow", 160, 80, 420, 8, 2.6, 2.1, False), ("orange", 270, 970, 1770, 5, 3.6, 0.7, True),
-            ("yellow", 190, 100, 1810, 7, 2.9, 2.6, True)]
+    # 上の葉は y 200 より上に収める（見出しと重ねない）
+    spec = [("red", 250, 105, 95, 6, 3.4, 0.0, False), ("orange", 230, 985, 95, 5, 3.0, 1.3, False),
+            ("yellow", 110, 55, 330, 8, 2.6, 2.1, False), ("orange", 240, 985, 1800, 5, 3.6, 0.7, True),
+            ("yellow", 160, 90, 1830, 7, 2.9, 2.6, True)]
     items = [(sized(n, w, f), cx, cy, amp, per, ph) for n, w, cx, cy, amp, per, ph, f in spec]
     fall = sized("yellow", 110)
     # 地はキービジュアルと同じ色（上が明るいベージュ→下が濃い金色）。最初のカットとつながるように
@@ -133,4 +139,4 @@ if __name__ == "__main__":
     cup_closeup()
     run("bg_calendar.py", "--year", "2026", "--month", "10", "--open", "12,13,15,19,22,26,27,29", "--closed", "20",
         "--out", P("clips", "04_calendar.mp4"))   # 下の文字と離すためカップは出さない
-    run("bg_end.py", "--out", P("clips", "06_end.mp4"))
+    # 最後のロゴは 10月の営業日リールのもの（video/cal_reel/clips/05_end.mp4・金色の地）をそのまま使う

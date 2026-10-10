@@ -54,7 +54,8 @@
      ],
      "x": 135,
      "y": 920,
-     "size": 6
+     "size": 6,
+     "color": "terra"
     },
     {
      "at": 1.75,
@@ -116,15 +117,19 @@
     {
      "at": 5.7,
      "lines": [
-      "スープの野菜は兵庫県産",
-      "さつまいもは ヘルシーファーム"
+      "さつまいもは ヘルシーファーム産"
      ],
-     "y": 1640,
-     "size": 6,
-     "colors": [
-      "brown",
-      "terra"
-     ]
+     "y": 1600,
+     "size": 8,
+     "color": "terra"
+    },
+    {
+     "at": 6.1,
+     "lines": [
+      "スープの野菜は すべて兵庫県産"
+     ],
+     "y": 1710,
+     "size": 6
     }
    ]
   },
@@ -151,6 +156,60 @@
      "y": 1720,
      "size": 13,
      "color": "terra"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03a_person_wave.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "場所は 加納町3-11-8 の2階"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    },
+    {
+     "at": 0.8,
+     "lines": [
+      "黒い階段を上がってください"
+     ],
+     "y": 1620,
+     "size": 7,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03b_gaikan.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "JR三ノ宮駅から徒歩10分"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    },
+    {
+     "at": 0.8,
+     "lines": [
+      "Googleマップで「VEGEONE」"
+     ],
+     "y": 1620,
+     "size": 7,
+     "color": "gold"
     }
    ]
   },
@@ -196,58 +255,7 @@
   {
    "clips": [
     {
-     "file": "03a_person_wave.mp4"
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.2,
-     "lines": [
-      "場所は 加納町3-11-8 の2階"
-     ],
-     "y": 300,
-     "size": 10
-    },
-    {
-     "at": 0.8,
-     "lines": [
-      "黒い階段を上がってください"
-     ],
-     "y": 1620,
-     "size": 7
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
-     "file": "03b_gaikan.mp4"
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.2,
-     "lines": [
-      "JR三ノ宮駅から徒歩10分"
-     ],
-     "y": 300,
-     "size": 10
-    },
-    {
-     "at": 0.8,
-     "lines": [
-      "Googleマップで「VEGEONE」"
-     ],
-     "y": 1620,
-     "size": 7,
-     "color": "terra"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
-     "file": "06_end.mp4"
+     "file": "05_end.mp4"
     }
    ],
    "telop": [
@@ -257,7 +265,8 @@
       "詳しくは公式LINEで"
      ],
      "y": 1250,
-     "size": 9
+     "size": 9,
+     "color": "cream"
     },
     {
      "at": 1.2,
@@ -266,7 +275,7 @@
      ],
      "y": 1380,
      "size": 6,
-     "color": "terra"
+     "color": "gold"
     },
     {
      "at": 1.6,
@@ -274,7 +283,8 @@
       "@refarm_soup"
      ],
      "y": 1500,
-     "size": 7
+     "size": 7,
+     "color": "cream"
     }
    ]
   }
