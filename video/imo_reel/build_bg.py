@@ -24,6 +24,7 @@ from common import key_green
 os.makedirs(os.path.join(HERE, "clips"), exist_ok=True)
 P = lambda *a: os.path.join(HERE, *a)
 os.environ.setdefault("REEL_FONT", "Yomogi-Regular.ttf")   # plan の "font" とそろえる
+os.environ.setdefault("REEL_INK", "brown")                 # 地が明るいので、カレンダーの文字は焦げ茶・営業日の丸はテラコッタ
 LEAF_BOX = {"red": (95, 30, 305, 245), "orange": (535, 20, 750, 228), "yellow": (92, 242, 218, 365)}   # キービジュアル上の位置
 
 
@@ -57,8 +58,8 @@ def opening_still(Z=1.45, OY=120, CW=980, BY=1800):
     前にカップを大きく置く（消した跡はカップの後ろに隠れる位置にしてある）"""
     kv = np.array(Image.open(P("src", "kv_autumn.jpg")).convert("RGB"))
     mask = np.zeros(kv.shape[:2], np.uint8)
-    # 器・ソフトクリーム・元のカップ／上のもみじ3枚／見出しの所を通る蜜の筋（文字と絵を重ねない）
-    for r in [(115, 690, 515, 1095), (200, 505, 395, 760), (430, 495, 845, 995)] + list(LEAF_BOX.values()) + [(436, 0, 466, 245)]:
+    # 器・ソフトクリーム・元のカップ／上のもみじ3枚（見出しにかからない隅へ置き直す）。蜜の筋は残す
+    for r in [(115, 690, 515, 1095), (200, 505, 395, 760), (430, 495, 845, 995)] + list(LEAF_BOX.values()):
         cv2.rectangle(mask, r[:2], r[2:], 255, -1)
     clean = cv2.inpaint(kv, mask, 25, cv2.INPAINT_TELEA)
     W, H = B.W, B.H; kw, kh = int(896 * Z), int(1152 * Z)
@@ -86,7 +87,7 @@ def opening_still(Z=1.45, OY=120, CW=980, BY=1800):
 
 
 def autumn_bg(dur=10.0):
-    """金色の地に、キービジュアルのもみじが四隅でゆらゆら揺れ、右から1枚ゆっくり落ちる（2・3・5カットの地）"""
+    """金色の地に、キービジュアルのもみじが四隅でゆらゆら揺れる（落ちる葉はカレンダーの数字に重なるので入れない）（2・3・5カットの地）"""
     L = {n: Image.open(P("src", "leaf_%s.png" % n)) for n in LEAF_BOX}
 
     def sized(n, w, flip=False):
@@ -98,7 +99,6 @@ def autumn_bg(dur=10.0):
             ("yellow", 110, 55, 330, 8, 2.6, 2.1, False), ("orange", 240, 985, 1800, 5, 3.6, 0.7, True),
             ("yellow", 160, 90, 1830, 7, 2.9, 2.6, True)]
     items = [(sized(n, w, f), cx, cy, amp, per, ph) for n, w, cx, cy, amp, per, ph, f in spec]
-    fall = sized("yellow", 110)
     # 地はキービジュアルと同じ色（上が明るいベージュ→下が濃い金色）。最初のカットとつながるように
     kv = np.array(Image.open(P("src", "kv_autumn.jpg")).convert("RGB")).astype(np.float32)
     top, mid, bot = kv[10:30, 380:520].mean(axis=(0, 1)), kv[230:260, 380:520].mean(axis=(0, 1)), kv[1110:1140, 380:520].mean(axis=(0, 1))
@@ -112,11 +112,6 @@ def autumn_bg(dur=10.0):
             ang = amp * math.sin(2 * math.pi * t / per + ph)
             r = leaf.rotate(ang, resample=Image.BICUBIC, expand=True)
             im.alpha_composite(r, (int(cx - r.width / 2), int(cy - r.height / 2 + 6 * math.sin(2 * math.pi * t / per + ph + 1))))
-        # 1枚だけ、右上から左下へひらひら落ちる（ループのつなぎ目で消えるように最初と最後は透明）
-        p = t / dur; x = 860 - 380 * p + 60 * math.sin(p * 6 * math.pi); y = 260 + 1300 * p
-        f = fall.rotate(40 * math.sin(p * 5 * math.pi), resample=Image.BICUBIC, expand=True)
-        f.putalpha(f.getchannel("A").point(lambda v: int(v * min(1, p * 6, (1 - p) * 6) * 0.9)))
-        im.alpha_composite(f, (int(x), int(y)))
         return im
     B.render(frame, dur, P("src", "autumn_bg.mp4"), "autumn")
 
