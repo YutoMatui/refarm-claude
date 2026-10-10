@@ -63,7 +63,25 @@ DENOISE = "highpass=f=85,afftdn=nr=16:nf=-42,lowpass=f=14000"
 
 WHITE = (1.0, 1.0, 1.0)
 YELLOW = (1.0, 0.84, 0.2)
-COLORS = {"white": WHITE, "yellow": YELLOW, "黄": YELLOW, "白": WHITE}
+CREAM = (1.0, 0.97, 0.90)
+GOLD = (1.0, 0.84, 0.55)
+COLORS = {"white": WHITE, "yellow": YELLOW, "黄": YELLOW, "白": WHITE, "cream": CREAM, "gold": GOLD}
+
+# 様式：plan.json の "style" で切り替える
+#   "pop"（既定）      = reference/style.md         50日企画の連載（企業フォント・白字黒縁・OP/ED・SE）
+#   "restaurant"       = reference/style_restaurant.md 店のメニュー・営業日・行き方（Shippori Mincho・クリーム・縁なし・OP/EDなし）
+_REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
+STYLES = {
+    "pop": {"ttf": None, "font_id": FONT_ID, "font_title": "企業", "default_color": WHITE,
+            "border": True, "need_op_ed": True, "size": BASE_SIZE},
+    "restaurant": {"ttf": os.path.join(_REPO, "fonts", "ShipporiMincho-Bold.ttf"), "font_id": "",
+                   "font_title": "Shippori Mincho", "default_color": CREAM,
+                   "border": False, "need_op_ed": False, "size": 11.0},
+}
+STYLE = {}
+def set_style(name):
+    STYLE.clear(); STYLE.update(STYLES.get(name or "pop", STYLES["pop"])); STYLE["name"] = name if name in STYLES else "pop"
+set_style("pop")
 
 
 def run(cmd):
@@ -224,6 +242,8 @@ def nativize(draft_dir, draft_name, template_path):
 
 
 def font_ttf():
+    if STYLE.get("ttf"):
+        return STYLE["ttf"].replace("\\", "/") if os.path.exists(STYLE["ttf"]) else ""
     """フォント「企業」の実体（TTF）のパス。CapCutのキャッシュ → 手持ちの メインテロップ.ttf の順。"""
     if os.path.isdir(FONT_CACHE):
         for root, _dirs, files in os.walk(FONT_CACHE):
@@ -248,19 +268,19 @@ def inject_font(content_p):
         return False
     ttf = font_ttf()
     for t in texts:
-        t.update({"font_path": ttf, "font_resource_id": FONT_ID, "font_id": "",
+        t.update({"font_path": ttf, "font_resource_id": STYLE["font_id"], "font_id": "",
                   "font_title": "none", "font_name": "", "font_source_platform": 1,
                   "font_category_id": "", "font_category_name": "", "font_url": "",
                   "font_third_resource_id": "", "font_team_id": ""})
-        t["fonts"] = [{"id": str(uuid.uuid4()).upper(), "resource_id": FONT_ID,
+        t["fonts"] = [{"id": str(uuid.uuid4()).upper(), "resource_id": STYLE["font_id"],
                        "third_resource_id": "", "category_id": "preset",
                        "category_name": "プリセット", "source_platform": 1, "path": ttf,
-                       "effect_id": FONT_ID, "title": "企業", "team_id": "", "file_uri": "",
+                       "effect_id": STYLE["font_id"], "title": STYLE["font_title"], "team_id": "", "file_uri": "",
                        "request_id": ""}]
         try:
             cj = json.loads(t.get("content", "{}"))
             for st in cj.get("styles", []):
-                st["font"] = {"path": ttf, "id": FONT_ID}
+                st["font"] = {"path": ttf, "id": STYLE["font_id"]}
             t["content"] = json.dumps(cj, ensure_ascii=False)
         except Exception:
             pass
@@ -275,7 +295,7 @@ def check_plan(plan):
     if not segments:
         die("segments が空です。")
     # 骨格の検査。OPとEDが無い動画は「りふぁーむの動画」に見えない（reference/style.md 1.）
-    if not plan.get("no_op_ed"):
+    if not plan.get("no_op_ed") and STYLE.get("need_op_ed", True):
         first = (segments[0].get("clips") or [{}])[0].get("file", "")
         last = (segments[-1].get("clips") or [{}])[-1].get("file", "")
         if "オープニング" not in first:
@@ -377,7 +397,7 @@ def build_layout(plan, assets_dir):
     for si, seg in enumerate(segments):
         for card in seg.get("telop", []):
             lines = card["lines"]
-            size = float(card.get("size", BASE_SIZE))
+            size = float(card.get("size", STYLE.get("size", BASE_SIZE)))
             step = LINE_STEP * size / BASE_SIZE
             yc = card.get("y", 1340)
             per_line = card.get("colors")
@@ -387,10 +407,10 @@ def build_layout(plan, assets_dir):
             E = min(E, starts[si] + durs[si])
             n = len(lines)
             for li, line in enumerate(lines):
-                cname = (per_line[li] if per_line and li < len(per_line) else card.get("color", "white"))
+                cname = (per_line[li] if per_line and li < len(per_line) else card.get("color", ""))
                 L["telop"].append({"text": line, "start": S, "dur": E - S,
                                    "y": yc + (li - (n - 1) / 2) * step, "size": size,
-                                   "color": COLORS.get(cname, WHITE), "line": li})
+                                   "color": COLORS.get(cname, STYLE["default_color"]), "line": li})
 
     for s in plan.get("se", []):
         at = starts[s["seg"]] + round(s.get("at", 0) * US)
@@ -403,6 +423,8 @@ def build_layout(plan, assets_dir):
 # ── 本体 ────────────────────────────────────────────────────
 def main(plan_path):
     plan = json.load(open(plan_path, encoding="utf-8"))
+    set_style(plan.get("style", "pop"))
+    print("様式: %s（reference/%s）" % (STYLE["name"], "style_restaurant.md" if STYLE["name"] == "restaurant" else "style.md"))
     name = plan["name"]
     assets_dir = plan.get("assets_dir") or os.path.join(STABLE_ROOT, name)
     if not os.path.isdir(CAPCUT_DRAFTS):
@@ -441,8 +463,8 @@ def main(plan_path):
         S, E = t["start"], t["start"] + t["dur"]
         seg_t = d.TextSegment(
             t["text"], Timerange(S, E - S),
-            style=d.TextStyle(size=t["size"], bold=True, color=t["color"], align=1),
-            border=d.TextBorder(color=(0.0, 0.0, 0.0)),
+            style=d.TextStyle(size=t["size"], bold=STYLE["border"], color=t["color"], align=1),
+            border=(d.TextBorder(color=(0.0, 0.0, 0.0)) if STYLE["border"] else None),
             # 画面中心が960px。transform_y は正が上なのでこの向きになる
             clip_settings=d.ClipSettings(transform_y=(960 - t["y"]) / 960))
         # 同じトラック内で時間が重なると落ちるので、空いているトラックへ逃がす
@@ -476,8 +498,8 @@ def main(plan_path):
     print("長さ: %.2f秒" % (L["total"] / US))
     print("CapCutを再起動すると一覧に出ます。")
     if not font_ok:
-        print("※ フォント「企業」の実体がこのPCに見つかりませんでした。")
-        print("  CapCutで開いて既定のゴシックになっていたら、テロップを全選択→フォント「企業」に一括変更してください。")
+        print("※ フォント「%s」の実体がこのPCに見つかりませんでした。" % STYLE["font_title"])
+        print("  CapCutで開いて既定のゴシックになっていたら、テロップを全選択→フォント「%s」に一括変更してください。" % STYLE["font_title"])
 
 
 if __name__ == "__main__":

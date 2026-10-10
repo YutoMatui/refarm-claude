@@ -60,6 +60,7 @@ def rgb(c):
 
 def main(plan_path, out_path):
     plan = md.json.load(open(plan_path, encoding="utf-8"))
+    md.set_style(plan.get("style", "pop"))
     name = plan["name"]
     assets_dir = plan.get("assets_dir") or os.path.join(md.STABLE_ROOT, name)
     md.check_plan(plan)
@@ -117,8 +118,9 @@ def main(plan_path, out_path):
         fs = int(round(t["size"] * PX_PER_SIZE))
         s, e = t["start"] / US, (t["start"] + t["dur"]) / US
         chain.append(
-            "drawtext=textfile='%s':fontfile='%s':fontsize=%d:fontcolor=%s:"
-            "borderw=12:bordercolor=black:x=(w-tw)/2:y=%d-th/2:enable='between(t,%.3f,%.3f)'"
+            ("drawtext=textfile='%s':fontfile='%s':fontsize=%d:fontcolor=%s:"
+             + ("borderw=12:bordercolor=black:" if md.STYLE.get("border", True) else "shadowx=0:shadowy=4:shadowcolor=black@0.45:")
+             + "x=(w-tw)/2:y=%d-th/2:enable='between(t,%.3f,%.3f)'")
             % (esc_path(tf), esc_path(ttf), fs, rgb(t["color"]), int(round(t["y"])), s, e))
     vchain = ",".join(chain) if chain else "null"
     vchain += ",fade=t=in:st=0:d=0.5,fade=t=out:st=%.3f:d=0.7" % max(0.0, total - 0.7)

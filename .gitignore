@@ -26,3 +26,10 @@ vegeone_nobori/*_preview.png
 vegeone_nobori/_cmp_*.png
 .claude/skills/creative-kv/scripts/*.jpg
 .claude/skills/creative-kv/scripts/*.png
+
+# 動画の型（video/）：スクリプトと plan だけ入れる。素材・出力はDriveへ
+video/**/*.mp4
+video/**/*.png
+video/**/*.jpg
+video/**/*.MOV
+video/**/_frames_*/

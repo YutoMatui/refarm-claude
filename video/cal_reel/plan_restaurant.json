@@ -1,0 +1,210 @@
+{
+ "name": "10月の営業日_飲食店様式",
+ "style": "restaurant",
+ "sources": [
+  "C:/Users/YutoM/refarm-cc-company/refarm-claude/video/cal_reel/clips"
+ ],
+ "segments": [
+  {
+   "clips": [
+    {
+     "file": "01_kv_syrup.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.4,
+     "lines": [
+      "10月の営業日"
+     ],
+     "y": 300,
+     "size": 15
+    },
+    {
+     "at": 0.9,
+     "lines": [
+      "VEGEONE ｜ 三宮・加納町の野菜スープ"
+     ],
+     "y": 440,
+     "size": 7,
+     "color": "gold"
+    },
+    {
+     "at": 4.5,
+     "lines": [
+      "保存しておくと便利です"
+     ],
+     "y": 1700,
+     "size": 7
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "02_calendar.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "10月は 月・火・木"
+     ],
+     "y": 250,
+     "size": 12
+    },
+    {
+     "at": 0.6,
+     "lines": [
+      "11:00 – 14:00"
+     ],
+     "y": 390,
+     "size": 10,
+     "color": "gold"
+    },
+    {
+     "at": 4.4,
+     "lines": [
+      "20日（火）はお休み",
+      "12日（祝）は営業します"
+     ],
+     "y": 1480,
+     "size": 7,
+     "colors": [
+      "cream",
+      "gold"
+     ]
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03a_person_wave.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "場所は 加納町3-11-8 の2階"
+     ],
+     "y": 300,
+     "size": 10
+    },
+    {
+     "at": 0.8,
+     "lines": [
+      "黒い階段を上がってください"
+     ],
+     "y": 1620,
+     "size": 7
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03b_gaikan.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "JR三ノ宮駅から徒歩10分"
+     ],
+     "y": 300,
+     "size": 10
+    },
+    {
+     "at": 0.8,
+     "lines": [
+      "Googleマップで「VEGEONE」"
+     ],
+     "y": 1620,
+     "size": 7,
+     "color": "gold"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "04_kv_steam.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.3,
+     "lines": [
+      "10.30 金 ・ 11.1 日"
+     ],
+     "y": 250,
+     "size": 11
+    },
+    {
+     "at": 0.8,
+     "lines": [
+      "商大祭にも出店します"
+     ],
+     "y": 390,
+     "size": 11,
+     "color": "gold"
+    },
+    {
+     "at": 3.0,
+     "lines": [
+      "大学芋 ¥300 ／ 焼き芋スープ ¥500",
+      "2点で ¥100引き"
+     ],
+     "y": 1600,
+     "size": 7,
+     "colors": [
+      "cream",
+      "gold"
+     ]
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "05_end.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.8,
+     "lines": [
+      "学生団体りふぁーむ"
+     ],
+     "y": 1010,
+     "size": 7
+    },
+    {
+     "at": 1.2,
+     "lines": [
+      "月・火・木 11:00–14:00",
+      "Googleマップで VEGEONE"
+     ],
+     "y": 1250,
+     "size": 9,
+     "colors": [
+      "cream",
+      "gold"
+     ]
+    },
+    {
+     "at": 1.6,
+     "lines": [
+      "@refarm_soup"
+     ],
+     "y": 1430,
+     "size": 7
+    }
+   ]
+  }
+ ]
+}
