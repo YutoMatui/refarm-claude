@@ -161,7 +161,7 @@
   {
    "clips": [
     {
-     "file": "03a_person_wave.mp4"
+     "file": "03b_gaikan.mp4"
     }
    ],
    "telop": [
@@ -175,34 +175,17 @@
      "color": "cream"
     },
     {
-     "at": 0.8,
+     "at": 0.5,
+     "until": 1.9,
      "lines": [
-      "黒い階段を上がってください"
+      "JR三ノ宮駅から徒歩10分"
      ],
      "y": 1620,
      "size": 7,
      "color": "cream"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
-     "file": "03b_gaikan.mp4"
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.2,
-     "lines": [
-      "JR三ノ宮駅から徒歩10分"
-     ],
-     "y": 300,
-     "size": 10,
-     "color": "cream"
     },
     {
-     "at": 0.8,
+     "at": 1.9,
      "lines": [
       "Googleマップで「VEGEONE」"
      ],
