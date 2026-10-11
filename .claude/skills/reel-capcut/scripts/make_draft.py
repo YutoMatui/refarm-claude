@@ -481,6 +481,8 @@ def main(plan_path):
             t["text"], Timerange(S, E - S),
             style=d.TextStyle(size=t["size"], bold=STYLE["border"], color=t["color"], align=1),
             border=(d.TextBorder(color=(0.0, 0.0, 0.0)) if STYLE["border"] else None),
+            # 縁取りなしの様式（restaurant）は、代わりに柔らかい影で読ませる
+            shadow=(None if STYLE["border"] else d.TextShadow(alpha=0.8, color=(0.0, 0.0, 0.0), diffuse=22.0, distance=6.0, angle=-90.0)),
             # 画面中心が960px。transform_y は正が上なのでこの向きになる
             clip_settings=d.ClipSettings(transform_x=(t["x"] - 540) / 540, transform_y=(960 - t["y"]) / 960))
         # 同じトラック内で時間が重なると落ちるので、空いているトラックへ逃がす
