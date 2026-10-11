@@ -94,8 +94,9 @@ set_style("pop")
 
 def run(cmd):
     # Windows の cp932 で ffmpeg の stderr が UnicodeDecodeError になるため必ず utf-8 指定
+    # stdin を閉じて渡す。開いたままだと、背景で動かしたときに ffmpeg がキー入力待ちで止まることがある（2026-10-11 に実際に起きた）
     return subprocess.run(cmd, capture_output=True, text=True,
-                          encoding="utf-8", errors="replace")
+                          encoding="utf-8", errors="replace", stdin=subprocess.DEVNULL)
 
 
 def die(msg):
@@ -453,7 +454,7 @@ def main(plan_path):
     se_tracks = [script.append_track(d.TrackSpec(d.TrackType.audio, "効果音%d" % (i + 1)))
                  for i in range(2)]
     tx_tracks = [script.append_track(d.TrackSpec(d.TrackType.text, t))
-                 for t in ["テロップ上", "テロップ下", "テロップ予備1", "テロップ予備2"]]
+                 for t in ["テロップ上", "テロップ下"] + ["テロップ予備%d" % i for i in range(1, 15)]]  # 図解のように同時に多くの文字が出るカットがあるので16本
 
     print("タイムラインを組みます")
     for v in L["video"]:

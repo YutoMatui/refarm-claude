@@ -19,7 +19,8 @@
       "10月の新メニュー"
      ],
      "y": 300,
-     "size": 11
+     "size": 11,
+     "color": "brown"
     },
     {
      "at": 0.9,
@@ -29,6 +30,132 @@
      "y": 440,
      "size": 10,
      "color": "terra"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "02a_farm_une.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "さつまいもは"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "02b_farm_field.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.0,
+     "lines": [
+      "ヘルシーファームから"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "gold"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "02c_crate.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "収穫したての さつまいも"
+     ],
+     "y": 300,
+     "size": 9,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03a_onion.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.1,
+     "lines": [
+      "たまねぎ"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03b_pumpkin.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.1,
+     "lines": [
+      "かぼちゃ"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03c_peel.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.1,
+     "lines": [
+      "さつまいも"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03d_yakiimo.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.1,
+     "lines": [
+      "じっくり焼いて だしでのばす"
+     ],
+     "y": 300,
+     "size": 8,
+     "color": "cream"
     }
    ]
   },
@@ -45,63 +172,68 @@
       "こだわりの野菜"
      ],
      "y": 300,
-     "size": 9
+     "size": 9,
+     "color": "cream"
     },
     {
      "at": 1.6,
      "lines": [
       "さつまいも"
      ],
-     "x": 135,
-     "y": 920,
-     "size": 6
+     "x": 250,
+     "y": 930,
+     "size": 5.5,
+     "color": "cream"
     },
     {
      "at": 1.75,
      "lines": [
       "かぼちゃ"
      ],
-     "x": 135,
-     "y": 1005,
-     "size": 6
+     "x": 250,
+     "y": 1060,
+     "size": 5.5,
+     "color": "cream"
     },
     {
      "at": 1.9,
      "lines": [
       "たまねぎ"
      ],
-     "x": 135,
-     "y": 1090,
-     "size": 6
+     "x": 250,
+     "y": 1190,
+     "size": 5.5,
+     "color": "cream"
     },
     {
      "at": 3.2,
      "lines": [
       "枝豆"
      ],
-     "x": 965,
-     "y": 1180,
-     "size": 6,
-     "color": "terra"
+     "x": 1000,
+     "y": 1245,
+     "size": 5.5,
+     "color": "gold"
     },
     {
      "at": 3.7,
      "lines": [
       "もち麦"
      ],
-     "x": 990,
-     "y": 1365,
-     "size": 6,
-     "color": "terra"
+     "x": 1000,
+     "y": 1475,
+     "size": 5.5,
+     "color": "gold"
     },
     {
      "at": 4.5,
      "lines": [
       "大学芋"
      ],
-     "x": 300,
-     "y": 630,
-     "size": 6
+     "x": 320,
+     "y": 640,
+     "size": 5.5,
+     "color": "cream"
     },
     {
      "at": 5.0,
@@ -109,26 +241,46 @@
       "黒ごま",
       "せんべい"
      ],
-     "x": 945,
-     "y": 530,
-     "size": 6
+     "x": 950,
+     "y": 540,
+     "size": 5.5,
+     "color": "cream"
     },
     {
      "at": 5.7,
      "lines": [
-      "さつまいもは ヘルシーファーム"
-     ],
-     "y": 1600,
-     "size": 6.5,
-     "color": "terra"
-    },
-    {
-     "at": 6.1,
-     "lines": [
       "スープの野菜は すべて兵庫県産"
      ],
-     "y": 1710,
-     "size": 6
+     "y": 1700,
+     "size": 6.5,
+     "color": "gold"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "02b_radar.mp4"
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.3,
+     "lines": [
+      "1杯の栄養バランス"
+     ],
+     "y": 300,
+     "size": 9,
+     "color": "cream"
+    },
+    {
+     "at": 3.0,
+     "lines": [
+      "6項目のうち5項目が 30%の線を超えています"
+     ],
+     "y": 1620,
+     "size": 6,
+     "color": "gold"
     }
    ]
   },
@@ -145,7 +297,8 @@
       "極 焼きいもスープ"
      ],
      "y": 1560,
-     "size": 8
+     "size": 8,
+     "color": "brown"
     },
     {
      "at": 0.8,
@@ -244,7 +397,7 @@
     {
      "at": 0.8,
      "lines": [
-      "詳しくは公式LINEで"
+      "公式LINEで 友だち追加"
      ],
      "y": 1250,
      "size": 9,

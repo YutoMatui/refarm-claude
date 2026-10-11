@@ -1,8 +1,8 @@
 {
  "cup": "src/cup_green.png",
- "cup_w": 600,
- "cup_cx": 600,
- "cup_cy": 1080,
+ "cup_w": 480,
+ "cup_cx": 620,
+ "cup_cy": 1060,
  "dur": 8.5,
  "callouts": [
   {
@@ -12,17 +12,43 @@
     280
    ],
    "end": [
-    300,
-    1005
+    400,
+    1060
    ],
    "side": "left",
    "tail": 30,
    "at": 1.0,
    "bracket": [
-    905,
-    1105
+    895,
+    1225
    ],
-   "color": "brown"
+   "color": "cream",
+   "photos": [
+    {
+     "file": "src/ing_imo_crate_sq.jpg",
+     "at": [
+      80,
+      930
+     ],
+     "r": 60
+    },
+    {
+     "file": "src/ing_pumpkin_sq.jpg",
+     "at": [
+      80,
+      1060
+     ],
+     "r": 60
+    },
+    {
+     "file": "src/ing_onion_sq.jpg",
+     "at": [
+      80,
+      1190
+     ],
+     "r": 60
+    }
+   ]
   },
   {
    "name": "枝豆",
@@ -31,13 +57,19 @@
     450
    ],
    "end": [
-    850,
-    1180
+    900,
+    1150
    ],
    "side": "right",
    "tail": 30,
    "at": 2.6,
-   "color": "terra"
+   "color": "gold",
+   "photo": "src/ing_edamame.jpg",
+   "photo_at": [
+    1000,
+    1150
+   ],
+   "photo_r": 62
   },
   {
    "name": "もち麦",
@@ -46,13 +78,19 @@
     630
    ],
    "end": [
-    850,
-    1365
+    900,
+    1380
    ],
    "side": "right",
    "tail": 30,
    "at": 3.1,
-   "color": "terra"
+   "color": "gold",
+   "photo": "src/ing_mochimugi.jpg",
+   "photo_at": [
+    1000,
+    1380
+   ],
+   "photo_r": 62
   },
   {
    "name": "大学芋",
@@ -61,13 +99,13 @@
     230
    ],
    "end": [
-    430,
-    630
+    470,
+    640
    ],
    "side": "left",
    "tail": 30,
    "at": 3.9,
-   "color": "brown"
+   "color": "cream"
   },
   {
    "name": "黒ごませんべい",
@@ -76,13 +114,13 @@
     90
    ],
    "end": [
-    790,
-    530
+    800,
+    540
    ],
    "side": "right",
    "tail": 30,
    "at": 4.4,
-   "color": "brown"
+   "color": "cream"
   }
  ]
 }

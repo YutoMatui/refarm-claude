@@ -13,7 +13,7 @@ make_draft.py の build_layout をそのまま使うので、CapCut ドラフト
 - subprocess は encoding="utf-8" 必須（cp932 で落ちる）
 - 4K を複数同時デコードすると黙って尺欠けする → 1クリップずつ変換して concat、最後に出力尺を検証
 """
-import os
+import os, re
 import shutil
 import sys
 
@@ -35,7 +35,7 @@ def work_dir():
 
 
 def ff(args, what):
-    r = md.run(["ffmpeg", "-hide_banner", "-y", "-v", "error"] + args)
+    r = md.run(["ffmpeg", "-hide_banner", "-nostdin", "-y", "-v", "error"] + args)
     if r.returncode != 0:
         md.die("%s に失敗しました:\n%s" % (what, r.stderr[-2000:]))
 
@@ -147,6 +147,8 @@ def main(plan_path, out_path):
                         % (idx, v["dur"] / US, v["start"] // 1000, v["start"] // 1000, idx))
             idx += 1
     n = len(amix)
+    # 音声は joined.mp4 を入力に含めないので、入力番号を 1 つ繰り下げる
+    amix = [re.sub(r"^\[(\d+):a\]", lambda m: "[%d:a]" % (int(m.group(1)) - 1), x) for x in amix]
     script = ["[0:v]%s[v]" % vchain]
     if n:
         script += amix
@@ -154,18 +156,28 @@ def main(plan_path, out_path):
                       "amix=inputs=%d:normalize=0:dropout_transition=0,"
                       "loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.3,afade=t=out:st=%.3f:d=0.7[a]"
                       % (n, max(0.0, total - 0.7)))
-    fscript = os.path.join(W, "filter.txt")
-    with open(fscript, "w", encoding="utf-8") as f:
-        f.write(";\n".join(script))
-
-    print("書き出します")
-    args = inputs + ["-filter_complex_script", fscript, "-map", "[v]"]
+    # 映像と音声は別々に書き出してから合わせる。
+    # 1本の ffmpeg で [v] と [a] を同時に出すと、音声の入力が多い（10本以上）とき 5秒付近で止まることがある（2026-10-11 に実際に起きた）
+    fv = os.path.join(W, "filter_video.txt")
+    with open(fv, "w", encoding="utf-8") as f:
+        f.write(script[0])
+    print("書き出します（映像）")
+    vtmp = os.path.join(W, "video_only.mp4")
+    ff(["-i", joined, "-filter_complex_script", fv, "-map", "[v]", "-an", "-t", "%.3f" % total,
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+        "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10", "-pix_fmt", "yuv420p", vtmp], "映像の書き出し")
     if n:
-        args += ["-map", "[a]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
-    args += ["-t", "%.3f" % total, "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
-             "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10",
-             "-pix_fmt", "yuv420p", "-movflags", "+faststart", out_path]
-    ff(args, "書き出し")
+        fa = os.path.join(W, "filter_audio.txt")
+        with open(fa, "w", encoding="utf-8") as f:
+            f.write(";\n".join(script[1:]))
+        print("書き出します（音声）")
+        atmp = os.path.join(W, "audio_only.m4a")
+        ff(inputs[2:] + ["-filter_complex_script", fa, "-map", "[a]", "-t", "%.3f" % total,
+            "-c:a", "aac", "-b:a", "192k", "-ar", "48000", atmp], "音声の書き出し")
+        ff(["-i", vtmp, "-i", atmp, "-map", "0:v", "-map", "1:a", "-c", "copy", "-shortest",
+            "-movflags", "+faststart", out_path], "合成")
+    else:
+        ff(["-i", vtmp, "-c", "copy", "-movflags", "+faststart", out_path], "合成")
     got = probe_dur(out_path)
     if abs(got - total) > 0.15:
         md.die("出力の尺がずれました（期待 %.2f / 実際 %.2f）。メモリ不足の可能性。もう一度実行してください。" % (total, got))

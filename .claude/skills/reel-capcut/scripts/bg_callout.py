@@ -12,6 +12,8 @@ spec.json の例（video/imo_reel/zukai.json）:
   side    = 文字を置く側（left / right）。終わりからさらに横へ短く線を引く（tail px）。at = 線が伸び始める秒
   bracket = [上y, 下y] を書くと、線の終わりに縦の括り線を引く（いくつかの名前を1つのまとまりとして示す）
   color   = cream（既定）・gold・brown・terra。まとまりごとに色を変えて区別する（明るい地なら brown／terra）
+  photo   = 実物の写真（任意）。photo_at=[x,y]（中心px）・photo_r=半径px で、線の先に丸く置く。文字はその横に
+  photos  = 複数のときは [{"file":..,"at":[x,y],"r":..}, ...]
 """
 import json, os, sys
 from PIL import Image, ImageDraw, ImageFilter
@@ -41,8 +43,18 @@ def main():
     for c in spec["callouts"]:
         a = (x0 + c["anchor"][0] * r, y0 + c["anchor"][1] * r)
         e = tuple(c["end"]); sgn = -1 if c.get("side", "left") == "left" else 1
+        phs = []
+        for pc in ([{"file": c["photo"], "at": c["photo_at"], "r": c.get("photo_r", 80)}] if c.get("photo") else []) + c.get("photos", []):
+            # 実物の写真を丸く切って、線の先に置く（at＝中心px・r＝半径px）。線と同じ色の細い輪をつける
+            pr = int(pc.get("r", 80)); src_p = Image.open(os.path.join(base, pc["file"])).convert("RGB")
+            side = min(src_p.size); src_p = src_p.crop(((src_p.width - side) // 2, (src_p.height - side) // 2,
+                                                       (src_p.width - side) // 2 + side, (src_p.height - side) // 2 + side)).resize((pr * 2, pr * 2), Image.LANCZOS)
+            mask = Image.new("L", (pr * 2, pr * 2), 0); ImageDraw.Draw(mask).ellipse([0, 0, pr * 2 - 1, pr * 2 - 1], fill=255)
+            tile = Image.new("RGBA", (pr * 2 + 12, pr * 2 + 12), (0, 0, 0, 0))
+            ImageDraw.Draw(tile).ellipse([0, 0, pr * 2 + 11, pr * 2 + 11], fill=COL.get(c.get("color", "cream"), COL["cream"]))
+            tile.paste(src_p, (6, 6), mask); phs.append((tile, tuple(pc["at"])))
         callouts.append({"a": a, "e": e, "tl": (e[0] + c.get("tail", 50) * sgn, e[1]), "at": c["at"], "sgn": sgn,
-                         "br": c.get("bracket"), "col": COL.get(c.get("color", "cream"), COL["cream"])})
+                         "br": c.get("bracket"), "col": COL.get(c.get("color", "cream"), COL["cream"]), "phs": phs})
 
     def frame(t):
         im = B.bg_at(t)
@@ -63,6 +75,11 @@ def main():
             d.ellipse([a[0] - rad * 0.55, a[1] - rad * 0.55, a[0] + rad * 0.55, a[1] + rad * 0.55], fill=col)
             m = (a[0] + (e[0] - a[0]) * q1, a[1] + (e[1] - a[1]) * q1)
             d.line([a, m], fill=col, width=4)
+            if q2 > 0:
+                for tile, (px, py) in k["phs"]:
+                    tc = tile.copy(); tc.putalpha(tc.getchannel("A").point(lambda v: int(v * q2)))
+                    im.alpha_composite(tc, (int(px - tile.width / 2), int(py - tile.height / 2)))
+                d = ImageDraw.Draw(im, "RGBA")
             if q2 > 0:
                 if k["br"]:
                     # 縦の括り線：終わりの点から上下へ伸び、両端に文字側へ短い返し
