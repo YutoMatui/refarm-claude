@@ -57,3 +57,11 @@
 - 文字を読みやすく：背景動画14本すべてを `prep_clip.py --shade` に通して上30%・下12%を暗くした（元は `clips_raw/`）。見出しの文字を1段階大きく。CapCut の文字には柔らかい影（make_draft が自動で付ける）、確認用の焼き込みも影を濃く
 - CapCut ドラフト「10月の新メニュー_極焼きいもスープ」を作り直し済み（53.5秒）。ディゾルブは CapCut で付ける
 - 別PCで編集するなら、CapCut の「スペース（ワークスペース）」にドラフトをアップロードして共有するのが早い（素材ごと渡る）。Claude Code でやり直す場合は Drive の背景動画を `clips/` に置いて `make_draft.py plan.json`
+
+## 別のPCで編集を再開する（CapCut の共有スペースが使えないとき）
+1. refarm-claude を開く（自動で pull される）→ ブランチ `claude/dreamy-edison-72p63v` に切り替える
+2. Google ドライブ（G:）が起動していることを確認する
+3. Claude Code に「`video/imo_reel/plan.json` からドラフトを作り直して」と頼む。中身は `python .claude/skills/reel-capcut/scripts/resume_draft.py video/imo_reel/plan.json`
+   （Drive の `完成動画/極焼きいもスープ_背景動画（文字なし）/` から背景動画14本を `clips/` にコピーしてから、そのPCの CapCut にドラフトを作る）
+4. CapCut を再起動して「10月の新メニュー_極焼きいもスープ」を開く。フォントが既定のままなら全選択→ Yomogi。カット間にディゾルブを付ける
+必要なもの：CapCut（一度起動して新規プロジェクトを1つ作っておく）／Python 3＋`pip install pyJianYingDraft pillow numpy`／ffmpeg。API キーは不要

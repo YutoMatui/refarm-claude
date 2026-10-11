@@ -251,6 +251,7 @@ ffmpeg -i 音声.wav -af "atrim=start=2.20,asetpts=N/SR/TB" 音声_修正.wav   
 4. `python scripts/make_draft.py video/〈企画名〉/plan.json` → CapCut を再起動してドラフトを開く。確認用 mp4 は `python scripts/render_mp4.py video/〈企画名〉/plan.json 出力.mp4`
 5. メンバーに渡すこと：ドラフト名／フォントが既定ゴシックなら全選択→「Shippori Mincho」／つなぎ目は0.3秒のディゾルブ／BGMは小さく（OpenTracks）／現場の音は残す／1080pで書き出し
 6. 完成品と背景動画は Drive `50日企画素材/完成動画/` へ。リポジトリには plan とスクリプトだけ（mp4・png は .gitignore 済み）
+7. **別のPCで編集を再開する**：plan に `"drive_clips": "G:/.../完成動画/〈企画〉_背景動画（文字なし）"` を書いておき、`python scripts/resume_draft.py video/〈企画名〉/plan.json`。Drive から背景動画を `clips/` に集めて、そのPCの CapCut にドラフトを作る（CapCut の共有スペースが使えないときの代わり）
 
 ## 作り直しの注意
 
