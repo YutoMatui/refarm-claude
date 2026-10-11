@@ -53,9 +53,11 @@ def leaves():
     print("できました: src/leaf_*.png")
 
 
-def opening_still(Z=1.45, OY=120, CW=980, BY=1800):
+def opening_still(Z=1.45, OY=120, CW=880, BY=1692, CX=640):
     """最初のカットの元絵。キービジュアルを拡大して上に置き、大学芋の器・ソフトクリーム・元のカップを消して、
-    前にカップを大きく置く（消した跡はカップの後ろに隠れる位置にしてある）"""
+    前にカップを置く（消した跡はカップの後ろに隠れる位置にしてある）。
+    蜜の筋が焼き芋の実に落ちる所（画面 x≈543, y≈800）が見えるよう、カップは右に寄せる。
+    真上にトッピングがあると、動画生成で蜜が大学芋にかかってしまう（2026-10-11 代表の指摘：ヘルシーさから離れる）"""
     kv = np.array(Image.open(P("src", "kv_autumn.jpg")).convert("RGB"))
     mask = np.zeros(kv.shape[:2], np.uint8)
     # 器・ソフトクリーム・元のカップ／上のもみじ3枚（見出しにかからない隅へ置き直す）。蜜の筋は残す
@@ -77,10 +79,12 @@ def opening_still(Z=1.45, OY=120, CW=980, BY=1800):
     im = Image.fromarray(can.clip(0, 255).astype(np.uint8)).convert("RGBA")
     cup = cup_cut(); cup = cup.resize((CW, int(cup.height * CW / cup.width)), Image.LANCZOS)
     sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    ImageDraw.Draw(sh).ellipse([540 - CW * 0.42, BY - 50, 540 + CW * 0.46, BY + 30], fill=(80, 35, 5, 130))
-    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(30))); im.alpha_composite(cup, (540 - CW // 2, BY - cup.height))
+    ImageDraw.Draw(sh).ellipse([CX - CW * 0.42, BY - 50, CX + CW * 0.46, BY + 30], fill=(80, 35, 5, 130))
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(30))); im.alpha_composite(cup, (CX - CW // 2, BY - cup.height))
     # もみじは見出し（y 230〜470）にかからない隅へ置き直す
-    for n, w, x, y in [("red", 250, -10, 10), ("orange", 230, 850, 20), ("yellow", 120, 20, 520)]:
+    # 左下の2枚は、カップを右に寄せて見えた「大学芋を消した跡」を隠す役も兼ねる
+    for n, w, x, y in [("red", 250, -10, 10), ("orange", 230, 850, 20), ("yellow", 120, 20, 520),
+                       ("orange", 300, 20, 880), ("red", 230, -30, 1110)]:
         lf = Image.open(P("src", "leaf_%s.png" % n)); lf = lf.resize((w, int(lf.height * w / lf.width)), Image.LANCZOS)
         im.alpha_composite(lf, (x, y))
     im.convert("RGB").save(P("src", "01_imo_916.png")); print("できました: src/01_imo_916.png")
