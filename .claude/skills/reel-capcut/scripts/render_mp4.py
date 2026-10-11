@@ -108,7 +108,30 @@ def main(plan_path, out_path):
         for p in pieces:
             f.write("file '%s'\n" % p.replace("\\", "/"))
     joined = os.path.join(W, "joined.mp4")
-    ff(["-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined], "結合")
+    tr = plan.get("transition")
+    if tr and len(pieces) > 1:
+        # カットの間をディゾルブでつなぐ（plan の "transition": {"type": "fade", "dur": 0.3}）。
+        # 各カットの終わりを X 秒だけ止め絵で延ばしてから重ねるので、テロップの時刻（セグメントの開始）はずれない
+        X = float(tr.get("dur", 0.3)); kind = tr.get("type", "fade")
+        print("ディゾルブでつなぎます（%.2f秒・%s）" % (X, kind))
+        durs = [v["dur"] / US for v in L["video"]]
+        ins = []; fc = []
+        for i, pc in enumerate(pieces):
+            ins += ["-i", pc]
+            fc.append("[%d:v]tpad=stop_mode=clone:stop_duration=%.3f[c%d]" % (i, X, i))
+        prev = "[c0]"; off = 0.0
+        for i in range(1, len(pieces)):
+            off += durs[i - 1]
+            outl = "[x%d]" % i if i < len(pieces) - 1 else "[v]"
+            fc.append("%s[c%d]xfade=transition=%s:duration=%.3f:offset=%.3f%s" % (prev, i, kind, X, off, outl))
+            prev = outl
+        fx = os.path.join(W, "filter_join.txt")
+        with open(fx, "w", encoding="utf-8") as f:
+            f.write(";\n".join(fc))
+        ff(ins + ["-filter_complex_script", fx, "-map", "[v]", "-t", "%.3f" % total, "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                  "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10", "-pix_fmt", "yuv420p", joined], "結合（ディゾルブ）")
+    else:
+        ff(["-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined], "結合")
 
     # 2) テロップ焼き込みフィルタ（1行=1 drawtext）
     print("テロップを焼き込みます（%d 行）" % len(L["telop"]))
@@ -154,7 +177,7 @@ def main(plan_path, out_path):
         script += amix
         script.append("".join("[a%d]" % (i + 1) for i in range(n)) +
                       "amix=inputs=%d:normalize=0:dropout_transition=0,"
-                      "loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.3,afade=t=out:st=%.3f:d=0.7[a]"
+                      "loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.3,afade=t=out:st=%.3f:d=0.7,apad[a]"   # apad: 効果音だけのとき音声が短くなり映像が削れるのを防ぐ（-t total で切る）
                       % (n, max(0.0, total - 0.7)))
     # 映像と音声は別々に書き出してから合わせる。
     # 1本の ffmpeg で [v] と [a] を同時に出すと、音声の入力が多い（10本以上）とき 5秒付近で止まることがある（2026-10-11 に実際に起きた）

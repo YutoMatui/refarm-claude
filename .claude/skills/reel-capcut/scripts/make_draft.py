@@ -18,7 +18,9 @@ plan.json の形（詳しくは SKILL.md）:
      "clips": [{"file": "オープニング.mp4", "offset": 0}],
      "telop": [{"at": 0.35, "lines": ["16日後に三宮に"], "y": 231}]}
   ],
-  "se": [{"file": "ドーン.mp3", "seg": 7, "at": 3.1, "volume": 0.7}]
+  "se": [{"file": "ドーン.mp3", "seg": 7, "at": 3.1, "volume": 0.7}],
+  "mute_clips": true,                      // 省略可。true なら音声なしセグメントの素材音も使わない（店の動画で現場音が汚いとき）
+  "transition": {"type": "fade", "dur": 0.3}   // 省略可。render_mp4 のカット間ディゾルブ（CapCut ドラフトには付かないので CapCut で付ける）
 }
 
 telop カードの任意項目:
@@ -353,7 +355,7 @@ def build_layout(plan, assets_dir):
             vmat = d.VideoMaterial(os.path.join(assets_dir, clips[0]["file"]))
             L["video"].append({"file": clips[0]["file"], "start": cursor, "dur": vmat.duration,
                                "src_off": 0, "scale": cover_scale(vmat, clips[0].get("fit")),
-                               "vmat": vmat, "keep_audio": True})
+                               "vmat": vmat, "keep_audio": not plan.get("mute_clips", False)})   # "mute_clips": true で素材の音を使わない
             durs.append(vmat.duration)
             cursor += vmat.duration
             continue

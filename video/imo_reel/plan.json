@@ -3,7 +3,7 @@
  "style": "restaurant",
  "sources": [
   "C:/Users/YutoM/refarm-cc-company/refarm-claude/video/imo_reel/clips",
-  "C:/Users/YutoM/refarm-cc-company/refarm-claude/video/cal_reel/clips"
+  "G:/マイドライブ/50日企画素材/_共通素材/SE_CapCutライブラリ"
  ],
  "segments": [
   {
@@ -77,7 +77,7 @@
    ],
    "telop": [
     {
-     "at": 0.2,
+     "at": 0.3,
      "lines": [
       "収穫したての さつまいも"
      ],
@@ -176,6 +176,15 @@
      "color": "cream"
     },
     {
+     "at": 5.7,
+     "lines": [
+      "スープの野菜は すべて兵庫県産"
+     ],
+     "y": 420,
+     "size": 6,
+     "color": "gold"
+    },
+    {
      "at": 1.6,
      "lines": [
       "さつまいも"
@@ -245,15 +254,6 @@
      "y": 540,
      "size": 5.5,
      "color": "cream"
-    },
-    {
-     "at": 5.7,
-     "lines": [
-      "スープの野菜は すべて兵庫県産"
-     ],
-     "y": 1700,
-     "size": 6.5,
-     "color": "gold"
     }
    ]
   },
@@ -278,7 +278,7 @@
      "lines": [
       "6項目のうち5項目が 30%の線を超えています"
      ],
-     "y": 1620,
+     "y": 420,
      "size": 6,
      "color": "gold"
     }
@@ -296,7 +296,7 @@
      "lines": [
       "極 焼きいもスープ"
      ],
-     "y": 1560,
+     "y": 180,
      "size": 8,
      "color": "brown"
     },
@@ -305,8 +305,8 @@
      "lines": [
       "¥600"
      ],
-     "y": 1720,
-     "size": 13,
+     "y": 1380,
+     "size": 12,
      "color": "terra"
     }
    ]
@@ -328,21 +328,11 @@
      "color": "cream"
     },
     {
-     "at": 0.5,
-     "until": 1.9,
-     "lines": [
-      "JR三ノ宮駅から徒歩10分"
-     ],
-     "y": 1620,
-     "size": 7,
-     "color": "cream"
-    },
-    {
-     "at": 1.9,
+     "at": 0.6,
      "lines": [
       "Googleマップで「VEGEONE」"
      ],
-     "y": 1620,
+     "y": 430,
      "size": 7,
      "color": "gold"
     }
@@ -361,7 +351,8 @@
       "10月は 月・火・木"
      ],
      "y": 250,
-     "size": 12
+     "size": 12,
+     "color": "brown"
     },
     {
      "at": 0.6,
@@ -378,8 +369,8 @@
       "20日（火）はお休み",
       "12日（祝）は営業します"
      ],
-     "y": 1640,
-     "size": 7,
+     "y": 1400,
+     "size": 6.5,
      "colors": [
       "brown",
       "terra"
@@ -390,7 +381,7 @@
   {
    "clips": [
     {
-     "file": "05_end.mp4"
+     "file": "05_end_qr.mp4"
     }
    ],
    "telop": [
@@ -399,27 +390,18 @@
      "lines": [
       "公式LINEで 友だち追加"
      ],
-     "y": 1250,
+     "y": 880,
      "size": 9,
      "color": "cream"
     },
     {
-     "at": 1.2,
+     "at": 1.4,
      "lines": [
-      "プロフィールのリンクから"
+      "プロフィールのリンクからも"
      ],
-     "y": 1380,
+     "y": 1420,
      "size": 6,
      "color": "gold"
-    },
-    {
-     "at": 1.6,
-     "lines": [
-      "@refarm_soup"
-     ],
-     "y": 1500,
-     "size": 7,
-     "color": "cream"
     }
    ]
   }
@@ -428,5 +410,30 @@
   "file": "Yomogi-Regular.ttf",
   "title": "Yomogi"
  },
- "color": "brown"
+ "color": "brown",
+ "mute_clips": true,
+ "transition": {
+  "type": "fade",
+  "dur": 0.3
+ },
+ "se": [
+  {
+   "file": "シャキーン（ドキュイーン）.mp3",
+   "seg": 0,
+   "at": 0.4,
+   "volume": 0.35
+  },
+  {
+   "file": "どどん.mp3",
+   "seg": 10,
+   "at": 0.8,
+   "volume": 0.45
+  },
+  {
+   "file": "シャキーンとポーズを決めるイメージ.mp3",
+   "seg": 13,
+   "at": 0.8,
+   "volume": 0.35
+  }
+ ]
 }
