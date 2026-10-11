@@ -27,7 +27,7 @@ def main():
     ink = B.INK + (255,)
     fill_col = (176, 82, 30, 150) if B.DARK_INK else (255, 214, 140, 130)
     line_col = (140, 52, 15, 255) if B.DARK_INK else (255, 247, 230, 255)
-    f_lab, f_num, f_small = B.font_jp(42), B.font_num(46), B.font_jp(28)
+    f_lab, f_num, f_small = B.font_jp(48), B.font_num(54), B.font_jp(30)
 
     def pt(i, frac):
         ang = -math.pi / 2 + 2 * math.pi * i / n
@@ -61,17 +61,29 @@ def main():
             im.alpha_composite(lay); d = ImageDraw.Draw(im, "RGBA")
             for p in poly:
                 d.ellipse([p[0] - 9, p[1] - 9, p[0] + 9, p[1] + 9], fill=line_col)
-        # 軸の名前（外側）と％（値が伸び切ったら）
+        # 軸の名前（外側）と％（値が伸び切ったら）。文字の後ろにぼかした影を敷いて読ませる
+        txt = Image.new("RGBA", (B.W, B.H), (0, 0, 0, 0)); td = ImageDraw.Draw(txt)
+        for i, (k, v) in enumerate(items):
+            lx, ly = pt(i, 1.0 + 0.30); w = td.textlength(k, font=f_lab)
+            td.text((lx - w / 2, ly - 56), k, font=f_lab, fill=(0, 0, 0, int(230 * g)))
+            if q >= 1:
+                s_ = "%d%%" % round(v); w2 = td.textlength(s_, font=f_num)
+                td.text((lx - w2 / 2, ly + 4), s_, font=f_num, fill=(0, 0, 0, 230))
+        if q >= 1:
+            s_ = "1食の目安に対する割合（八訂の推定値）・点線は30%"
+            w = td.textlength(s_, font=f_small); td.text((cx - w / 2, cy + R + 150), s_, font=f_small, fill=(0, 0, 0, 220))
+        im.alpha_composite(txt.filter(ImageFilter.GaussianBlur(6))); im.alpha_composite(txt.filter(ImageFilter.GaussianBlur(2)))
+        d = ImageDraw.Draw(im, "RGBA")
         for i, (k, v) in enumerate(items):
             lx, ly = pt(i, 1.0 + 0.30)
             w = d.textlength(k, font=f_lab)
-            d.text((lx - w / 2, ly - 52), k, font=f_lab, fill=B.INK + (int(255 * g),))
+            d.text((lx - w / 2, ly - 56), k, font=f_lab, fill=(255, 250, 240, int(255 * g)))
             if q >= 1:
                 s = "%d%%" % round(v); w2 = d.textlength(s, font=f_num)
                 col = (176, 82, 30, 255) if B.DARK_INK else (255, 214, 140, 255)
                 d.text((lx - w2 / 2, ly + 4), s, font=f_num, fill=col)
         if q >= 1:
-            s = "1食の目安（栄養素等表示基準値の1/3）に対する割合・八訂の推定値。点線は30%"
+            s = "1食の目安に対する割合（八訂の推定値）・点線は30%"
             w = d.textlength(s, font=f_small)
             d.text((cx - w / 2, cy + R + 150), s, font=f_small, fill=B.INK + (200,))
         return im
