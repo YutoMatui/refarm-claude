@@ -60,6 +60,7 @@ def rgb(c):
 
 def main(plan_path, out_path):
     plan = md.json.load(open(plan_path, encoding="utf-8"))
+    plan["_plan_path"] = os.path.abspath(plan_path)
     md.set_style(plan.get("style", "pop")); md.set_font(plan.get("font"))
     if plan.get("color") in md.COLORS:
         md.STYLE["default_color"] = md.COLORS[plan["color"]]

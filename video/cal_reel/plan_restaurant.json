@@ -2,7 +2,7 @@
  "name": "10月の営業日_飲食店様式",
  "style": "restaurant",
  "sources": [
-  "C:/Users/YutoM/refarm-cc-company/refarm-claude/video/cal_reel/clips"
+  "clips"
  ],
  "segments": [
   {

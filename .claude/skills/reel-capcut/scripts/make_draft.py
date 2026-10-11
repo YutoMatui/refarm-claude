@@ -331,7 +331,9 @@ def build_layout(plan, assets_dir):
     """
     import pyJianYingDraft as d
     segments = plan["segments"]
-    sources = plan.get("sources") or []
+    # sources は plan.json のある場所からの相対パスでもよい（別のPCでも同じ plan が使えるように）
+    base = os.path.dirname(os.path.abspath(plan.get("_plan_path", "")))  if plan.get("_plan_path") else os.getcwd()
+    sources = [d if os.path.isabs(d) else os.path.normpath(os.path.join(base, d)) for d in (plan.get("sources") or [])]
     os.makedirs(assets_dir, exist_ok=True)
 
     print("素材をそろえます")
@@ -434,6 +436,7 @@ def build_layout(plan, assets_dir):
 # ── 本体 ────────────────────────────────────────────────────
 def main(plan_path):
     plan = json.load(open(plan_path, encoding="utf-8"))
+    plan["_plan_path"] = os.path.abspath(plan_path)
     set_style(plan.get("style", "pop")); set_font(plan.get("font"))
     if plan.get("color") in COLORS:   # 地が明るいときは "color": "brown" で文字の既定色を変える
         STYLE["default_color"] = COLORS[plan["color"]]
