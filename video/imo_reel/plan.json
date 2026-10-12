@@ -19,7 +19,7 @@
    "clips": [
     {
      "file": "00c_seq_split.mp4",
-     "dur": 3.9
+     "dur": 3.6
     }
    ],
    "telop": []
@@ -29,8 +29,8 @@
     {
      "file": "00d_seq_pour.mp4",
      "dur": 3.9,
-     "offset": 0.1,
-     "xfade": 0.2
+     "offset": 0.0,
+     "xfade": 0.25
     }
    ],
    "telop": [
@@ -157,14 +157,34 @@
    "clips": [
     {
      "file": "03b_pumpkin.mp4",
-     "dur": 1.8
+     "dur": 1.4
     }
    ],
    "telop": [
     {
      "at": 0.1,
      "lines": [
-      "かぼちゃを 合わせると…"
+      "かぼちゃ"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03e_pots.mp4",
+     "dur": 2.4,
+     "offset": 0.8
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "合わせて 煮込むと…"
      ],
      "y": 300,
      "size": 10,
