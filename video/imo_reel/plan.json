@@ -68,7 +68,7 @@
    "clips": [
     {
      "file": "00e_seq_topping.mp4",
-     "dur": 3.8
+     "dur": 4.0
     }
    ],
    "telop": []
@@ -126,10 +126,10 @@
     {
      "at": 0.3,
      "lines": [
-      "収穫したての さつまいも"
+      "収穫したての さつまいもを"
      ],
      "y": 300,
-     "size": 10,
+     "size": 9,
      "color": "cream"
     }
    ]
@@ -194,8 +194,27 @@
   {
    "clips": [
     {
-     "file": "03_cup_close.mp4",
-     "dur": 3.4
+     "file": "03e_pots.mp4",
+     "dur": 2.4
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "これらを 合わせると…"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "03_menu_kv.mp4",
+     "dur": 3.8
     }
    ],
    "telop": [
@@ -205,7 +224,7 @@
       "極 焼きいもスープ"
      ],
      "y": 300,
-     "size": 10,
+     "size": 11,
      "color": "cream"
     },
     {
@@ -216,6 +235,15 @@
      "y": 470,
      "size": 15,
      "color": "gold"
+    },
+    {
+     "at": 1.5,
+     "lines": [
+      "10月15日（木）販売開始"
+     ],
+     "y": 640,
+     "size": 8,
+     "color": "cream"
     }
    ]
   },
@@ -292,7 +320,7 @@
    "clips": [
     {
      "file": "05_end_place.mp4",
-     "dur": 4.6
+     "dur": 4.8
     }
    ],
    "telop": [
