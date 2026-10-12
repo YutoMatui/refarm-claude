@@ -356,9 +356,11 @@ def build_layout(plan, assets_dir):
         if not seg.get("audio"):
             vmat = d.VideoMaterial(os.path.join(assets_dir, clips[0]["file"]))
             # "dur": 秒 を書くと、その長さで切る（テンポを上げるとき。素材より長くはできない）
-            vdur = vmat.duration if clips[0].get("dur") is None else min(vmat.duration, round(float(clips[0]["dur"]) * US))
+            voff = round(float(clips[0].get("offset", 0)) * US)   # "offset": 秒 で頭を切る
+            avail = max(100_000, vmat.duration - voff)
+            vdur = avail if clips[0].get("dur") is None else min(avail, round(float(clips[0]["dur"]) * US))
             L["video"].append({"file": clips[0]["file"], "start": cursor, "dur": vdur,
-                               "src_off": 0, "scale": cover_scale(vmat, clips[0].get("fit")),
+                               "src_off": voff, "scale": cover_scale(vmat, clips[0].get("fit")),
                                "vmat": vmat, "keep_audio": not plan.get("mute_clips", False)})   # "mute_clips": true で素材の音を使わない
             durs.append(vdur)
             cursor += vdur

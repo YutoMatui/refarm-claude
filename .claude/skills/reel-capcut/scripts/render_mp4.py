@@ -121,10 +121,13 @@ def main(plan_path, out_path):
             ins += ["-i", pc]
             fc.append("[%d:v]tpad=stop_mode=clone:stop_duration=%.3f[c%d]" % (i, X, i))
         prev = "[c0]"; off = 0.0
+        # クリップごとの "xfade": 秒（0 なら切り替え）。L["video"] の並びは plan のセグメント順（音声なしセグメント＝1クリップ）
+        per = [c.get("xfade") for seg in plan["segments"] for c in seg["clips"]]
         for i in range(1, len(pieces)):
             off += durs[i - 1]
+            xi = X if (i >= len(per) or per[i] is None) else max(0.001, float(per[i]))
             outl = "[x%d]" % i if i < len(pieces) - 1 else "[v]"
-            fc.append("%s[c%d]xfade=transition=%s:duration=%.3f:offset=%.3f%s" % (prev, i, kind, X, off, outl))
+            fc.append("%s[c%d]xfade=transition=%s:duration=%.3f:offset=%.3f%s" % (prev, i, kind, xi, off, outl))
             prev = outl
         fx = os.path.join(W, "filter_join.txt")
         with open(fx, "w", encoding="utf-8") as f:

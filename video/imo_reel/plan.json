@@ -47,7 +47,9 @@
    "clips": [
     {
      "file": "00d_seq_pour.mp4",
-     "dur": 4.0
+     "dur": 3.7,
+     "offset": 0.3,
+     "xfade": 0
     }
    ],
    "telop": [
