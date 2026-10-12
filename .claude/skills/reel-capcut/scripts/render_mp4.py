@@ -149,7 +149,8 @@ def main(plan_path, out_path):
              + "x=%d-tw/2:y=%d-th/2:enable='between(t,%.3f,%.3f)'")
             % (esc_path(tf), esc_path(ttf), fs, rgb(t["color"]), int(round(t.get("x", 540))), int(round(t["y"])), s, e))
     vchain = ",".join(chain) if chain else "null"
-    vchain += ",fade=t=in:st=0:d=0.5,fade=t=out:st=%.3f:d=0.7" % max(0.0, total - 0.7)
+    if md.STYLE.get("border", True):   # pop だけ頭と尻をフェード。restaurant は暗転しない（2026-10-12 代表指示）
+        vchain += ",fade=t=in:st=0:d=0.5,fade=t=out:st=%.3f:d=0.7" % max(0.0, total - 0.7)
 
     # 3) 音声: ナレーション＋効果音＋（OP/EDの素材音）
     inputs = ["-i", joined]
@@ -178,8 +179,8 @@ def main(plan_path, out_path):
         script += amix
         script.append("".join("[a%d]" % (i + 1) for i in range(n)) +
                       "amix=inputs=%d:normalize=0:dropout_transition=0,"
-                      "loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.3,afade=t=out:st=%.3f:d=0.7,apad[a]"   # apad: 効果音だけのとき音声が短くなり映像が削れるのを防ぐ（-t total で切る）
-                      % (n, max(0.0, total - 0.7)))
+                      "loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.3,apad[a]"   # apad: 効果音だけのとき音声が短くなり映像が削れるのを防ぐ（-t total で切る）
+                      % (n,))
     # 映像と音声は別々に書き出してから合わせる。
     # 1本の ffmpeg で [v] と [a] を同時に出すと、音声の入力が多い（10本以上）とき 5秒付近で止まることがある（2026-10-11 に実際に起きた）
     fv = os.path.join(W, "filter_video.txt")
