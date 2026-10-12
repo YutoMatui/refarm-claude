@@ -141,25 +141,6 @@
   {
    "clips": [
     {
-     "file": "03c_peel.mp4",
-     "dur": 1.2
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.1,
-     "lines": [
-      "さつまいも"
-     ],
-     "y": 300,
-     "size": 11,
-     "color": "cream"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
      "file": "03d_yakiimo.mp4",
      "dur": 3.0
     }
@@ -345,8 +326,8 @@
       "10月は 月・火・木"
      ],
      "y": 250,
-     "size": 12,
-     "color": "cream"
+     "size": 13,
+     "color": "brown"
     },
     {
      "at": 0.6,
@@ -355,7 +336,7 @@
      ],
      "y": 390,
      "size": 11,
-     "color": "gold"
+     "color": "terra"
     },
     {
      "at": 3.8,
@@ -366,10 +347,9 @@
      "y": 1400,
      "size": 6.5,
      "colors": [
-      "cream",
-      "gold"
-     ],
-     "color": null
+      "brown",
+      "terra"
+     ]
     }
    ]
   },
