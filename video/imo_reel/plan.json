@@ -66,6 +66,15 @@
      "y": 300,
      "size": 11,
      "color": "gold"
+    },
+    {
+     "at": 0.5,
+     "lines": [
+      "神戸市西区の農家さん"
+     ],
+     "y": 430,
+     "size": 7,
+     "color": "cream"
     }
    ]
   },
@@ -296,44 +305,17 @@
      "lines": [
       "極 焼きいもスープ"
      ],
-     "y": 180,
-     "size": 9,
-     "color": "brown"
+     "y": 300,
+     "size": 10,
+     "color": "cream"
     },
     {
      "at": 0.8,
      "lines": [
       "¥600"
      ],
-     "y": 1380,
-     "size": 12,
-     "color": "terra"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
-     "file": "04_place.mp4"
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.2,
-     "lines": [
-      "場所は 加納町3-11-8 の2階"
-     ],
-     "y": 300,
-     "size": 11,
-     "color": "cream"
-    },
-    {
-     "at": 0.6,
-     "lines": [
-      "Googleマップで「VEGEONE」"
-     ],
-     "y": 430,
-     "size": 8,
+     "y": 470,
+     "size": 15,
      "color": "gold"
     }
    ]
@@ -352,7 +334,7 @@
      ],
      "y": 250,
      "size": 12,
-     "color": "brown"
+     "color": "cream"
     },
     {
      "at": 0.6,
@@ -361,7 +343,7 @@
      ],
      "y": 390,
      "size": 11,
-     "color": "terra"
+     "color": "gold"
     },
     {
      "at": 4.4,
@@ -372,35 +354,56 @@
      "y": 1400,
      "size": 6.5,
      "colors": [
-      "brown",
-      "terra"
-     ]
+      "cream",
+      "gold"
+     ],
+     "color": null
     }
    ]
   },
   {
    "clips": [
     {
-     "file": "05_end_qr.mp4"
+     "file": "05_end_place.mp4"
     }
    ],
    "telop": [
     {
-     "at": 0.8,
+     "at": 0.2,
+     "until": 2.0,
      "lines": [
-      "公式LINEで 友だち追加"
+      "場所は 加納町3-11-8 の2階"
      ],
-     "y": 880,
-     "size": 9,
+     "y": 300,
+     "size": 10,
      "color": "cream"
     },
     {
-     "at": 1.4,
+     "at": 0.6,
+     "until": 2.0,
      "lines": [
-      "プロフィールのリンクからも"
+      "Googleマップで「VEGEONE」"
      ],
-     "y": 1420,
-     "size": 6,
+     "y": 430,
+     "size": 7,
+     "color": "gold"
+    },
+    {
+     "at": 2.0,
+     "lines": [
+      "公式LINE ぜひ友だち追加を"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    },
+    {
+     "at": 2.4,
+     "lines": [
+      "新メニューの情報が届きます"
+     ],
+     "y": 430,
+     "size": 7,
      "color": "gold"
     }
    ]
