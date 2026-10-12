@@ -9,6 +9,83 @@
   {
    "clips": [
     {
+     "file": "00a_black.mp4",
+     "dur": 2.4
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.1,
+     "lines": [
+      "あなたは本当に",
+      "さつまいもを 食べたことが",
+      "ありますか？"
+     ],
+     "y": 900,
+     "size": 10,
+     "color": "white"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "00b_black.mp4",
+     "dur": 1.4
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.05,
+     "lines": [
+      "10月の新メニュー！"
+     ],
+     "y": 900,
+     "size": 13,
+     "color": "white"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "00c_seq_split.mp4",
+     "dur": 4.0
+    }
+   ],
+   "telop": []
+  },
+  {
+   "clips": [
+    {
+     "file": "00d_seq_pour.mp4",
+     "dur": 4.0
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.6,
+     "lines": [
+      "焼き芋を まるごとスープに"
+     ],
+     "y": 300,
+     "size": 10,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "00e_seq_topping.mp4",
+     "dur": 4.0
+    }
+   ],
+   "telop": []
+  },
+  {
+   "clips": [
+    {
      "file": "01_imo_drip.mp4",
      "dur": 3.0
     }
@@ -103,6 +180,25 @@
   {
    "clips": [
     {
+     "file": "03d_yakiimo.mp4",
+     "dur": 3.0
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.1,
+     "lines": [
+      "ホクホクの焼き芋に します"
+     ],
+     "y": 300,
+     "size": 9,
+     "color": "cream"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
      "file": "03a_onion.mp4",
      "dur": 1.2
     }
@@ -134,25 +230,6 @@
      ],
      "y": 300,
      "size": 11,
-     "color": "cream"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
-     "file": "03d_yakiimo.mp4",
-     "dur": 3.0
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.1,
-     "lines": [
-      "ホクホクの焼き芋を 使います"
-     ],
-     "y": 300,
-     "size": 9,
      "color": "cream"
     }
    ]
@@ -362,27 +439,7 @@
    ],
    "telop": [
     {
-     "at": 0.2,
-     "until": 1.8,
-     "lines": [
-      "場所は 加納町3-11-8 の2階"
-     ],
-     "y": 300,
-     "size": 10,
-     "color": "cream"
-    },
-    {
-     "at": 0.5,
-     "until": 1.8,
-     "lines": [
-      "Googleマップで「VEGEONE」"
-     ],
-     "y": 430,
-     "size": 7,
-     "color": "gold"
-    },
-    {
-     "at": 1.8,
+     "at": 0.3,
      "lines": [
       "公式LINE ぜひ友だち追加を"
      ],
@@ -391,7 +448,7 @@
      "color": "cream"
     },
     {
-     "at": 2.1,
+     "at": 0.7,
      "lines": [
       "新メニューの情報が届きます"
      ],

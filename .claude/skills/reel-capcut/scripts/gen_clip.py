@@ -6,6 +6,7 @@
 
     python gen_clip.py 見積                                  … 値段だけ出す（生成しない）
     python gen_clip.py 実行 out.mp4 元絵.png "動きの指示"      … 実際に作る
+    python gen_clip.py 実行 out.mp4 元絵.png "動きの指示" 終わりの絵.png … 最初の絵から終わりの絵へ変化させる（first/last frame）
     python gen_clip.py 履歴                                  … だれがいくら使ったか
 
 APIキーは環境変数 GEMINI_API_KEY から読む（スクリプトには書かない）。
@@ -58,7 +59,7 @@ def show_estimate():
     print("※ 実写が1本でもあるなら、そちらを使ってください。生成は最後の手段です。")
 
 
-def generate(out, still, prompt):
+def generate(out, still, prompt, last=None):
     key = cost.api_key()
     if not os.path.exists(still):
         print("エラー: 元にする画像がありません: " + still)
@@ -75,8 +76,10 @@ def generate(out, still, prompt):
 
     mime = "image/png" if still.lower().endswith(".png") else "image/jpeg"
     op = post("%s/models/%s:predictLongRunning?key=%s" % (ROOT, MODEL, key),
-              {"instances": [{"prompt": prompt + RULES,
-                              "image": {"bytesBase64Encoded": b64(still), "mimeType": mime}}],
+              {"instances": [dict({"prompt": prompt + RULES,
+                                   "image": {"bytesBase64Encoded": b64(still), "mimeType": mime}},
+                                  **({"lastFrame": {"bytesBase64Encoded": b64(last),
+                                                    "mimeType": "image/png" if last.lower().endswith(".png") else "image/jpeg"}} if last else {}))],
                "parameters": {"aspectRatio": "9:16", "resolution": "1080p"}})
     if not op or "name" not in op:
         print("生成を始められませんでした（課金なし）。")
@@ -138,7 +141,7 @@ if __name__ == "__main__":
         if len(sys.argv) < 5:
             print("使い方: python gen_clip.py 実行 out.mp4 元絵.png \"動きの指示\"")
             sys.exit(1)
-        generate(sys.argv[2], sys.argv[3], sys.argv[4])
+        generate(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5] if len(sys.argv) > 5 else None)
     else:
         print(__doc__)
         sys.exit(1)
