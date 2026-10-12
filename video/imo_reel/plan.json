@@ -18,25 +18,6 @@
   {
    "clips": [
     {
-     "file": "00b_black.mp4",
-     "dur": 1.4
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.05,
-     "lines": [
-      "10月の新メニュー！"
-     ],
-     "y": 900,
-     "size": 13,
-     "color": "white"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
      "file": "00c_seq_split.mp4",
      "dur": 3.75
     }
@@ -176,33 +157,14 @@
    "clips": [
     {
      "file": "03b_pumpkin.mp4",
-     "dur": 1.2
+     "dur": 1.8
     }
    ],
    "telop": [
     {
      "at": 0.1,
      "lines": [
-      "かぼちゃ"
-     ],
-     "y": 300,
-     "size": 11,
-     "color": "cream"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
-     "file": "03e_pots.mp4",
-     "dur": 2.4
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.2,
-     "lines": [
-      "これらを 合わせると…"
+      "かぼちゃを 合わせると…"
      ],
      "y": 300,
      "size": 10,
