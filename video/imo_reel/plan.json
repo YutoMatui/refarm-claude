@@ -38,7 +38,7 @@
    "clips": [
     {
      "file": "00c_seq_split.mp4",
-     "dur": 4.0
+     "dur": 3.75
     }
    ],
    "telop": []
@@ -47,9 +47,9 @@
    "clips": [
     {
      "file": "00d_seq_pour.mp4",
-     "dur": 3.7,
-     "offset": 0.3,
-     "xfade": 0
+     "dur": 3.9,
+     "offset": 0.1,
+     "xfade": 0.2
     }
    ],
    "telop": [
