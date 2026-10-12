@@ -355,11 +355,13 @@ def build_layout(plan, assets_dir):
         # 音声なしのセグメントは、1本目のクリップの尺をそのまま使う（OP/EDの単体置き）
         if not seg.get("audio"):
             vmat = d.VideoMaterial(os.path.join(assets_dir, clips[0]["file"]))
-            L["video"].append({"file": clips[0]["file"], "start": cursor, "dur": vmat.duration,
+            # "dur": 秒 を書くと、その長さで切る（テンポを上げるとき。素材より長くはできない）
+            vdur = vmat.duration if clips[0].get("dur") is None else min(vmat.duration, round(float(clips[0]["dur"]) * US))
+            L["video"].append({"file": clips[0]["file"], "start": cursor, "dur": vdur,
                                "src_off": 0, "scale": cover_scale(vmat, clips[0].get("fit")),
                                "vmat": vmat, "keep_audio": not plan.get("mute_clips", False)})   # "mute_clips": true で素材の音を使わない
-            durs.append(vmat.duration)
-            cursor += vmat.duration
+            durs.append(vdur)
+            cursor += vdur
             continue
 
         amat = d.AudioMaterial(os.path.join(assets_dir, seg["audio"]))

@@ -1,5 +1,5 @@
 {
- "name": "10月の新メニュー_極焼きいもスープ",
+ "name": "10月の新メニュー_極焼きいもスープ_v10テンポ",
  "style": "restaurant",
  "sources": [
   "clips",
@@ -9,7 +9,8 @@
   {
    "clips": [
     {
-     "file": "01_imo_drip.mp4"
+     "file": "01_imo_drip.mp4",
+     "dur": 3.0
     }
    ],
    "telop": [
@@ -36,7 +37,8 @@
   {
    "clips": [
     {
-     "file": "02a_farm_une.mp4"
+     "file": "02a_farm_une.mp4",
+     "dur": 1.5
     }
    ],
    "telop": [
@@ -54,7 +56,8 @@
   {
    "clips": [
     {
-     "file": "02b_farm_field.mp4"
+     "file": "02b_farm_field.mp4",
+     "dur": 2.2
     }
    ],
    "telop": [
@@ -81,7 +84,8 @@
   {
    "clips": [
     {
-     "file": "02c_crate.mp4"
+     "file": "02c_crate.mp4",
+     "dur": 2.4
     }
    ],
    "telop": [
@@ -99,7 +103,8 @@
   {
    "clips": [
     {
-     "file": "03a_onion.mp4"
+     "file": "03a_onion.mp4",
+     "dur": 1.2
     }
    ],
    "telop": [
@@ -117,7 +122,8 @@
   {
    "clips": [
     {
-     "file": "03b_pumpkin.mp4"
+     "file": "03b_pumpkin.mp4",
+     "dur": 1.2
     }
    ],
    "telop": [
@@ -135,7 +141,8 @@
   {
    "clips": [
     {
-     "file": "03c_peel.mp4"
+     "file": "03c_peel.mp4",
+     "dur": 1.2
     }
    ],
    "telop": [
@@ -153,7 +160,8 @@
   {
    "clips": [
     {
-     "file": "03d_yakiimo.mp4"
+     "file": "03d_yakiimo.mp4",
+     "dur": 3.0
     }
    ],
    "telop": [
@@ -171,7 +179,8 @@
   {
    "clips": [
     {
-     "file": "02_zukai.mp4"
+     "file": "02_zukai.mp4",
+     "dur": 5.8
     }
    ],
    "telop": [
@@ -185,7 +194,7 @@
      "color": "cream"
     },
     {
-     "at": 5.7,
+     "at": 4.6,
      "lines": [
       "スープの野菜は すべて兵庫県産"
      ],
@@ -244,7 +253,7 @@
      "color": "gold"
     },
     {
-     "at": 4.5,
+     "at": 4.0,
      "lines": [
       "大学芋"
      ],
@@ -254,7 +263,7 @@
      "color": "cream"
     },
     {
-     "at": 5.0,
+     "at": 4.4,
      "lines": [
       "黒ごま",
       "せんべい"
@@ -269,7 +278,8 @@
   {
    "clips": [
     {
-     "file": "02b_radar.mp4"
+     "file": "02b_radar.mp4",
+     "dur": 4.2
     }
    ],
    "telop": [
@@ -283,7 +293,7 @@
      "color": "cream"
     },
     {
-     "at": 3.0,
+     "at": 2.8,
      "lines": [
       "6項目のうち5項目が 30%の線を超えています"
      ],
@@ -296,7 +306,8 @@
   {
    "clips": [
     {
-     "file": "03_cup_close.mp4"
+     "file": "03_cup_close.mp4",
+     "dur": 2.4
     }
    ],
    "telop": [
@@ -323,7 +334,8 @@
   {
    "clips": [
     {
-     "file": "04_calendar.mp4"
+     "file": "04_calendar.mp4",
+     "dur": 4.6
     }
    ],
    "telop": [
@@ -346,7 +358,7 @@
      "color": "gold"
     },
     {
-     "at": 4.4,
+     "at": 3.8,
      "lines": [
       "20日（火）はお休み",
       "12日（祝）は営業します"
@@ -364,13 +376,14 @@
   {
    "clips": [
     {
-     "file": "05_end_place.mp4"
+     "file": "05_end_place.mp4",
+     "dur": 4.6
     }
    ],
    "telop": [
     {
      "at": 0.2,
-     "until": 2.0,
+     "until": 1.8,
      "lines": [
       "場所は 加納町3-11-8 の2階"
      ],
@@ -380,7 +393,7 @@
     },
     {
      "at": 0.6,
-     "until": 2.0,
+     "until": 1.8,
      "lines": [
       "Googleマップで「VEGEONE」"
      ],
@@ -389,7 +402,7 @@
      "color": "gold"
     },
     {
-     "at": 2.0,
+     "at": 1.8,
      "lines": [
       "公式LINE ぜひ友だち追加を"
      ],
@@ -398,7 +411,7 @@
      "color": "cream"
     },
     {
-     "at": 2.4,
+     "at": 2.2,
      "lines": [
       "新メニューの情報が届きます"
      ],
