@@ -19,7 +19,7 @@
    "clips": [
     {
      "file": "00c_seq_split.mp4",
-     "dur": 3.75
+     "dur": 3.9
     }
    ],
    "telop": []
@@ -262,19 +262,6 @@
      "y": 390,
      "size": 11,
      "color": "terra"
-    },
-    {
-     "at": 3.8,
-     "lines": [
-      "20日（火）はお休み",
-      "12日（祝）は営業します"
-     ],
-     "y": 1400,
-     "size": 6.5,
-     "colors": [
-      "brown",
-      "terra"
-     ]
     }
    ]
   },
@@ -308,8 +295,8 @@
   }
  ],
  "font": {
-  "file": "Yomogi-Regular.ttf",
-  "title": "Yomogi"
+  "file": "ShipporiMincho-Bold.ttf",
+  "title": "Shippori Mincho"
  },
  "color": "brown",
  "mute_clips": true,
