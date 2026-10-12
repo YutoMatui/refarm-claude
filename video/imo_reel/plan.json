@@ -38,7 +38,7 @@
    "clips": [
     {
      "file": "00c_seq_split.mp4",
-     "dur": 4.0
+     "dur": 3.7
     }
    ],
    "telop": []
@@ -69,17 +69,7 @@
      "dur": 4.0
     }
    ],
-   "telop": [
-    {
-     "at": 2.6,
-     "lines": [
-      "極 焼きいもスープ"
-     ],
-     "y": 300,
-     "size": 11,
-     "color": "cream"
-    }
-   ]
+   "telop": []
   },
   {
    "clips": [
@@ -207,6 +197,43 @@
   {
    "clips": [
     {
+     "file": "03_cup_close.mp4",
+     "dur": 3.4
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.2,
+     "lines": [
+      "この野菜で 作っています"
+     ],
+     "y": 300,
+     "size": 9,
+     "color": "cream"
+    },
+    {
+     "at": 1.2,
+     "lines": [
+      "極 焼きいもスープ"
+     ],
+     "y": 440,
+     "size": 10,
+     "color": "cream"
+    },
+    {
+     "at": 1.8,
+     "lines": [
+      "¥600"
+     ],
+     "y": 600,
+     "size": 15,
+     "color": "gold"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
      "file": "02b_radar.mp4",
      "dur": 4.2
     }
@@ -218,7 +245,7 @@
       "1杯の栄養バランス"
      ],
      "y": 300,
-     "size": 10,
+     "size": 9,
      "color": "cream"
     },
     {
@@ -227,35 +254,7 @@
       "6項目のうち5項目が 30%の線を超えています"
      ],
      "y": 420,
-     "size": 7,
-     "color": "gold"
-    }
-   ]
-  },
-  {
-   "clips": [
-    {
-     "file": "03_cup_close.mp4",
-     "dur": 2.4
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.3,
-     "lines": [
-      "極 焼きいもスープ"
-     ],
-     "y": 300,
-     "size": 10,
-     "color": "cream"
-    },
-    {
-     "at": 0.8,
-     "lines": [
-      "¥600"
-     ],
-     "y": 470,
-     "size": 15,
+     "size": 6,
      "color": "gold"
     }
    ]
