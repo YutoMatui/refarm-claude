@@ -38,7 +38,7 @@
    "clips": [
     {
      "file": "00c_seq_split.mp4",
-     "dur": 3.7
+     "dur": 3.3
     }
    ],
    "telop": []
@@ -66,7 +66,7 @@
    "clips": [
     {
      "file": "00e_seq_topping.mp4",
-     "dur": 4.0
+     "dur": 3.8
     }
    ],
    "telop": []
@@ -101,20 +101,15 @@
     {
      "at": 0.0,
      "lines": [
-      "ヘルシーファームから"
+      "有機農家の",
+      "ヘルシーファームさんから"
      ],
-     "y": 300,
-     "size": 11,
-     "color": "gold"
-    },
-    {
-     "at": 0.5,
-     "lines": [
-      "神戸市西区の農家さん"
-     ],
-     "y": 430,
-     "size": 7,
-     "color": "cream"
+     "y": 340,
+     "size": 10,
+     "colors": [
+      "cream",
+      "gold"
+     ]
     }
    ]
   },
@@ -203,29 +198,20 @@
    ],
    "telop": [
     {
-     "at": 0.2,
-     "lines": [
-      "この野菜で 作っています"
-     ],
-     "y": 300,
-     "size": 9,
-     "color": "cream"
-    },
-    {
-     "at": 1.2,
+     "at": 0.3,
      "lines": [
       "極 焼きいもスープ"
      ],
-     "y": 440,
+     "y": 300,
      "size": 10,
      "color": "cream"
     },
     {
-     "at": 1.8,
+     "at": 0.9,
      "lines": [
       "¥600"
      ],
-     "y": 600,
+     "y": 470,
      "size": 15,
      "color": "gold"
     }
@@ -337,7 +323,7 @@
  "mute_clips": true,
  "transition": {
   "type": "fade",
-  "dur": 0.3
+  "dur": 0.4
  },
  "drive_clips": "G:/マイドライブ/50日企画素材/完成動画/極焼きいもスープ_背景動画（文字なし）"
 }
