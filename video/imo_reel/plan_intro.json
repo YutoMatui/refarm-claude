@@ -1,0 +1,64 @@
+{
+ "name": "冒頭_問いかけ（コピペ用）",
+ "style": "restaurant",
+ "font": {
+  "file": "ShipporiMincho-Bold.ttf",
+  "title": "Shippori Mincho"
+ },
+ "sources": [
+  "clips"
+ ],
+ "mute_clips": true,
+ "transition": {
+  "type": "fade",
+  "dur": 0.3
+ },
+ "segments": [
+  {
+   "clips": [
+    {
+     "file": "00a_blur.mp4",
+     "dur": 2.8
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.05,
+     "lines": [
+      "本当においしい",
+      "さつまいもを",
+      "食べたことが",
+      "ありますか？"
+     ],
+     "vertical": true,
+     "y": 960,
+     "size": 10,
+     "color": "white"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
+     "file": "00a_mosaic.mp4",
+     "dur": 2.8
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.05,
+     "lines": [
+      "本当においしい",
+      "さつまいもを",
+      "食べたことが",
+      "ありますか？"
+     ],
+     "vertical": true,
+     "y": 960,
+     "size": 10,
+     "color": "white"
+    }
+   ]
+  }
+ ]
+}
