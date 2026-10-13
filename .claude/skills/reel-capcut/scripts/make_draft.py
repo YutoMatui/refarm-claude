@@ -26,6 +26,7 @@ plan.json の形（詳しくは SKILL.md）:
 telop カードの任意項目:
   "until": 終わり秒（省略=セグメント末尾）  "y": 中心px（既定1340）  "x": 横の中心px（既定540＝中央。図解のラベル用）  "size": CapCut上の文字サイズ（既定13）
   "vertical": true  縦書き（lines の1つ＝1列。右から左。CapCut では縦書きテキストになり、文字のまま直せる）
+セグメントの "overlays": [{"file": "farmer_tile.png", "at": 0.3, "x": 832, "y": 818, "w": 356}]  … 画像を別トラックに重ねる（CapCut で動かせる）
   "color": "white"/"yellow"（カード全体）  "colors": ["white","yellow"]（行ごと。color より優先）
 """
 import json
@@ -436,6 +437,18 @@ def build_layout(plan, assets_dir):
                                    "y": y, "x": x, "size": size, "vertical": vertical,
                                    "color": COLORS.get(cname, STYLE["default_color"]), "line": li})
 
+    # 画像の重ね（農家さんの顔・QRなど）。plan のセグメントに "overlays": [{"file","at","until","x","y","w"}]
+    # 別トラックに置くので、CapCut 上で位置や大きさを動かせる
+    L["overlay"] = []
+    for si, seg in enumerate(segments):
+        for ov in seg.get("overlays", []):
+            path = stage(ov["file"], sources, assets_dir)
+            S = starts[si] + round(ov.get("at", 0) * US)
+            E = (starts[si] + round(ov["until"] * US)) if ov.get("until") is not None else starts[si] + durs[si]
+            E = min(E, starts[si] + durs[si])
+            L["overlay"].append({"file": ov["file"], "path": path, "start": S, "dur": E - S,
+                                 "x": ov.get("x", 540), "y": ov.get("y", 960), "w": ov.get("w", 300)})
+
     for s in plan.get("se", []):
         at = starts[s["seg"]] + round(s.get("at", 0) * US)
         amat = d.AudioMaterial(os.path.join(assets_dir, s["file"]))
@@ -484,6 +497,19 @@ def main(plan_path):
     for a in L["audio"]:
         script.add_segment(d.AudioSegment(a["amat"], Timerange(a["start"], a["dur"])), ta)
 
+    if L.get("overlay"):
+        print("画像を重ねます（%d 枚）" % len(L["overlay"]))
+        tov = script.append_track(d.TrackSpec(d.TrackType.video, "画像"))
+        from PIL import Image as _Img
+        for o in L["overlay"]:
+            mat = d.VideoMaterial(o["path"])
+            iw, ih = _Img.open(o["path"]).size
+            fitted_w = iw * min(CANVAS_W / iw, CANVAS_H / ih)   # CapCut は画像を画面に収めて置くので、その幅を基準に倍率を出す
+            sc = o["w"] / fitted_w
+            script.add_segment(d.VideoSegment(mat, Timerange(o["start"], o["dur"]),
+                                              clip_settings=d.ClipSettings(scale_x=sc, scale_y=sc,
+                                                                           transform_x=(o["x"] - 540) / 540,
+                                                                           transform_y=(960 - o["y"]) / 960)), tov)
     print("テロップを入れます")
     tx_end = [0] * len(tx_tracks)
     for t in L["telop"]:

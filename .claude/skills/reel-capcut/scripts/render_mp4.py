@@ -195,12 +195,20 @@ def main(plan_path, out_path):
     amix = [re.sub(r"^\[(\d+):a\]", lambda m: "[%d:a]" % (int(m.group(1)) - 1), x) for x in amix]
     # 縦書きPNGの重ね（[0:v]→drawtext→overlay…→[v]）。入力は joined のあとに PNG を並べる
     vin = ["-i", joined]
-    if overlays:
+    # 画像の重ね（plan の overlays）も同じ仕組みで。(png, s, e, w, x, y)
+    ovs = [(png, s_, e_, None, 0, 0) for (png, s_, e_) in overlays]
+    for o in L.get("overlay", []):
+        ovs.append((o["path"], o["start"] / US, (o["start"] + o["dur"]) / US, o["w"], o["x"], o["y"]))
+    if ovs:
         g = "[0:v]%s[t0]" % vchain; prev = "[t0]"
-        for k, (png, s_, e_) in enumerate(overlays):
+        for k, (png, s_, e_, w_, x_, y_) in enumerate(ovs):
             vin += ["-loop", "1", "-i", png]
-            outl = "[v]" if k == len(overlays) - 1 else "[t%d]" % (k + 1)
-            g += ";%s[%d:v]overlay=0:0:format=auto:enable='between(t,%.3f,%.3f)'%s" % (prev, k + 1, s_, e_, outl); prev = outl
+            outl = "[v]" if k == len(ovs) - 1 else "[t%d]" % (k + 1)
+            if w_:
+                g += ";[%d:v]scale=%d:-1[o%d];%s[o%d]overlay=x=%d-w/2:y=%d-h/2:format=auto:enable='between(t,%.3f,%.3f)'%s" % (k + 1, int(w_), k, prev, k, int(x_), int(y_), s_, e_, outl)
+            else:
+                g += ";%s[%d:v]overlay=0:0:format=auto:enable='between(t,%.3f,%.3f)'%s" % (prev, k + 1, s_, e_, outl)
+            prev = outl
         script = [g]
     else:
         script = ["[0:v]%s[v]" % vchain]

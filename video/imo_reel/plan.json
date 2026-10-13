@@ -1,8 +1,9 @@
 {
- "name": "10月の新メニュー_極焼きいもスープ_v27",
+ "name": "10月の新メニュー_極焼きいもスープ_v28",
  "style": "restaurant",
  "sources": [
   "clips",
+  "src",
   "G:/マイドライブ/50日企画素材/_共通素材/SE_CapCutライブラリ"
  ],
  "segments": [
@@ -126,6 +127,15 @@
       "cream",
       "gold"
      ]
+    }
+   ],
+   "overlays": [
+    {
+     "file": "farmer_tile.png",
+     "at": 0.3,
+     "x": 832,
+     "y": 818,
+     "w": 356
     }
    ]
   },
@@ -342,6 +352,15 @@
      "y": 430,
      "size": 7,
      "color": "gold"
+    }
+   ],
+   "overlays": [
+    {
+     "file": "qr_tile.png",
+     "at": 0.3,
+     "x": 540,
+     "y": 1150,
+     "w": 344
     }
    ]
   }
