@@ -18,6 +18,25 @@
   {
    "clips": [
     {
+     "file": "00b_black.mp4",
+     "dur": 1.4
+    }
+   ],
+   "telop": [
+    {
+     "at": 0.05,
+     "lines": [
+      "それが、これです。"
+     ],
+     "y": 900,
+     "size": 12,
+     "color": "white"
+    }
+   ]
+  },
+  {
+   "clips": [
+    {
      "file": "00c_seq_split.mp4",
      "dur": 3.6
     }
@@ -52,17 +71,7 @@
      "dur": 4.0
     }
    ],
-   "telop": [
-    {
-     "at": 2.75,
-     "lines": [
-      "それが、これです。"
-     ],
-     "y": 300,
-     "size": 11,
-     "color": "cream"
-    }
-   ]
+   "telop": []
   },
   {
    "clips": [
