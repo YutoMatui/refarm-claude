@@ -157,34 +157,24 @@
    "clips": [
     {
      "file": "03b_pumpkin.mp4",
-     "dur": 1.4
+     "dur": 2.6
     }
    ],
    "telop": [
     {
      "at": 0.1,
+     "until": 1.1,
      "lines": [
       "かぼちゃ"
      ],
      "y": 300,
      "size": 10,
      "color": "cream"
-    }
-   ]
-  },
-  {
-   "clips": [
+    },
     {
-     "file": "03e_pots.mp4",
-     "dur": 2.4,
-     "offset": 0.8
-    }
-   ],
-   "telop": [
-    {
-     "at": 0.2,
+     "at": 1.1,
      "lines": [
-      "合わせて 煮込むと…"
+      "合わせて 煮込んでいます"
      ],
      "y": 300,
      "size": 10,
@@ -289,12 +279,12 @@
    "clips": [
     {
      "file": "05_end_place.mp4",
-     "dur": 4.6
+     "dur": 2.8
     }
    ],
    "telop": [
     {
-     "at": 0.3,
+     "at": 0.15,
      "lines": [
       "公式LINE ぜひ友だち追加を"
      ],
@@ -303,7 +293,7 @@
      "color": "cream"
     },
     {
-     "at": 0.7,
+     "at": 0.3,
      "lines": [
       "新メニューの情報が届きます"
      ],
