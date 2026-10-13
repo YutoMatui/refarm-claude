@@ -25,6 +25,7 @@ plan.json の形（詳しくは SKILL.md）:
 
 telop カードの任意項目:
   "until": 終わり秒（省略=セグメント末尾）  "y": 中心px（既定1340）  "x": 横の中心px（既定540＝中央。図解のラベル用）  "size": CapCut上の文字サイズ（既定13）
+  "vertical": true  縦書き（lines の1つ＝1列。右から左。CapCut では縦書きテキストになり、文字のまま直せる）
   "color": "white"/"yellow"（カード全体）  "colors": ["white","yellow"]（行ごと。color より優先）
 """
 import json
@@ -423,10 +424,16 @@ def build_layout(plan, assets_dir):
                 else starts[si] + durs[si]
             E = min(E, starts[si] + durs[si])
             n = len(lines)
+            vertical = bool(card.get("vertical"))   # 縦書き：lines の1つが1列。右から左へ並べる（CapCut の縦書きテキスト）
+            colstep = (100 / BASE_SIZE) * size * 1.9   # 列の間隔 px（文字の大きさ×1.9）
             for li, line in enumerate(lines):
                 cname = (per_line[li] if per_line and li < len(per_line) else card.get("color", ""))
+                if vertical:
+                    x = card.get("x", 540) + ((n - 1) / 2 - li) * colstep; y = yc
+                else:
+                    x = card.get("x", 540); y = yc + (li - (n - 1) / 2) * step
                 L["telop"].append({"text": line, "start": S, "dur": E - S,
-                                   "y": yc + (li - (n - 1) / 2) * step, "x": card.get("x", 540), "size": size,
+                                   "y": y, "x": x, "size": size, "vertical": vertical,
                                    "color": COLORS.get(cname, STYLE["default_color"]), "line": li})
 
     for s in plan.get("se", []):
@@ -483,7 +490,7 @@ def main(plan_path):
         S, E = t["start"], t["start"] + t["dur"]
         seg_t = d.TextSegment(
             t["text"], Timerange(S, E - S),
-            style=d.TextStyle(size=t["size"], bold=STYLE["border"], color=t["color"], align=1),
+            style=d.TextStyle(size=t["size"], bold=STYLE["border"], color=t["color"], align=1, vertical=bool(t.get("vertical"))),
             border=(d.TextBorder(color=(0.0, 0.0, 0.0)) if STYLE["border"] else None),
             # 縁取りなしの様式（restaurant）は、代わりに柔らかい影で読ませる
             shadow=(None if STYLE["border"] else d.TextShadow(alpha=0.8, color=(0.0, 0.0, 0.0), diffuse=22.0, distance=6.0, angle=-90.0)),

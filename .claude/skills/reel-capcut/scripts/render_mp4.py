@@ -139,13 +139,29 @@ def main(plan_path, out_path):
 
     # 2) テロップ焼き込みフィルタ（1行=1 drawtext）
     print("テロップを焼き込みます（%d 行）" % len(L["telop"]))
-    chain = []
+    chain = []; overlays = []
     for i, t in enumerate(L["telop"]):
+        s, e = t["start"] / US, (t["start"] + t["dur"]) / US
+        fs = int(round(t["size"] * PX_PER_SIZE))
+        if t.get("vertical"):
+            # 縦書きは Pillow で1列ぶんの透明PNGを作って重ねる（CapCut 側は本物の縦書きテキスト）
+            from PIL import Image, ImageDraw, ImageFont, ImageFilter
+            png = os.path.join(W, "v%03d.png" % i)
+            lay = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+            font = ImageFont.truetype(ttf, fs); ch = int(fs * 1.25); n = len(t["text"])
+            x = int(round(t.get("x", 540))); y0 = int(round(t["y"])) - n * ch // 2 + ch // 2
+            col = tuple(int(round(v * 255)) for v in t["color"])
+            sh = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0)); ds = ImageDraw.Draw(sh)
+            for k, c in enumerate(t["text"]):
+                w = d2.textlength(c, font=font)
+                ds.text((x - w / 2, y0 + k * ch - fs // 2 + 5), c, font=font, fill=(0, 0, 0, 190))
+                d2.text((x - w / 2, y0 + k * ch - fs // 2), c, font=font, fill=col + (255,))
+            Image.alpha_composite(sh.filter(ImageFilter.GaussianBlur(5)), lay).save(png)
+            overlays.append((png, s, e))
+            continue
         tf = os.path.join(W, "t%03d.txt" % i)
         with open(tf, "w", encoding="utf-8") as f:
             f.write(t["text"])
-        fs = int(round(t["size"] * PX_PER_SIZE))
-        s, e = t["start"] / US, (t["start"] + t["dur"]) / US
         chain.append(
             ("drawtext=textfile='%s':fontfile='%s':fontsize=%d:fontcolor=%s:"
              + ("borderw=12:bordercolor=black:" if md.STYLE.get("border", True) else "shadowx=0:shadowy=5:shadowcolor=black@0.75:")
@@ -177,7 +193,17 @@ def main(plan_path, out_path):
     n = len(amix)
     # 音声は joined.mp4 を入力に含めないので、入力番号を 1 つ繰り下げる
     amix = [re.sub(r"^\[(\d+):a\]", lambda m: "[%d:a]" % (int(m.group(1)) - 1), x) for x in amix]
-    script = ["[0:v]%s[v]" % vchain]
+    # 縦書きPNGの重ね（[0:v]→drawtext→overlay…→[v]）。入力は joined のあとに PNG を並べる
+    vin = ["-i", joined]
+    if overlays:
+        g = "[0:v]%s[t0]" % vchain; prev = "[t0]"
+        for k, (png, s_, e_) in enumerate(overlays):
+            vin += ["-loop", "1", "-i", png]
+            outl = "[v]" if k == len(overlays) - 1 else "[t%d]" % (k + 1)
+            g += ";%s[%d:v]overlay=0:0:format=auto:enable='between(t,%.3f,%.3f)'%s" % (prev, k + 1, s_, e_, outl); prev = outl
+        script = [g]
+    else:
+        script = ["[0:v]%s[v]" % vchain]
     if n:
         script += amix
         script.append("".join("[a%d]" % (i + 1) for i in range(n)) +
@@ -191,7 +217,7 @@ def main(plan_path, out_path):
         f.write(script[0])
     print("書き出します（映像）")
     vtmp = os.path.join(W, "video_only.mp4")
-    ff(["-i", joined, "-filter_complex_script", fv, "-map", "[v]", "-an", "-t", "%.3f" % total,
+    ff(vin + ["-filter_complex_script", fv, "-map", "[v]", "-an", "-t", "%.3f" % total,
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
         "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10", "-pix_fmt", "yuv420p", vtmp], "映像の書き出し")
     if n:
