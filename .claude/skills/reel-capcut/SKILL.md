@@ -43,14 +43,16 @@ Notionに書いてある台本のリンクを渡されたら、CapCutで開け�
 答えが足りないときは、足りないものだけもう一度聞く。コードやパスの話はしない。
 この問いかけは `templates/brief.md` にも同じものがある（メンバーが先に埋めて持ってくる用）。
 
-## 様式は2つ（plan.json の "style" で選ぶ）
+## 様式は3つ（plan.json の "style" で選ぶ）
 
 | 様式 | 使う動画 | 決まり |
 |---|---|---|
 | `"pop"`（既定） | 50日企画の連載・ドキュメンタリー（語り＋OP/ED＋効果音） | `reference/style.md` |
 | `"restaurant"` | **店のメニュー紹介・営業日・行き方・作り方**（2026-10-10〜。学生っぽさより、きちんとした飲食店の表現） | `reference/style_restaurant.md`：Shippori Mincho（`fonts/` 同梱）・クリーム色・縁取りなし・OP/EDなし・効果音なし・現場音が主役 |
 
-迷ったら：店の商品や情報を伝える動画＝restaurant、代表の語りで物語を進める動画＝pop。
+| お知らせ（速いカット） | **閉店・オープン・イベント出店など「来てほしい」告知**（2026-10-31〜。11月閉店動画で決まった型） | `reference/style_promo.md`：`"style": "pop"`＋`"no_op_ed": true`・白字黒縁だけ・1カット約1秒・文と画を必ず合わせる・背景は `scripts/montage.py` |
+
+迷ったら：店の商品や情報を伝える動画＝restaurant、代表の語りで物語を進める動画＝pop、「この日に来て」を伝える告知＝お知らせ（style_promo.md）。
 restaurant の作り順は **背景動画（文字なし）→ CapCutでつなぐ → 文字はCapCutで後入れ**（`style_restaurant.md` 4.）。静止画をそのまま並べない。動きのない絵は `scripts/gen_clip.py` で画像から動画にする。
 
 ## 様式①pop の決まり（ここを外すと別の動画になる）

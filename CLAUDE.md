@@ -4,7 +4,7 @@
 団体の知識・ルール・スキルを共有するためのものです。
 このファイルが「頭」、`knowledge/` が「詳しい記憶」、`.claude/commands/` が「できること（スキル）」です。
 
-最終更新: 2026-10-09（販促ビジュアルの作り方＝creative-kv を追加）
+最終更新: 2026-10-31（動画：お知らせの速いカットの型・iPhone の HDR の色変換を reel-capcut に追加）
 
 ---
 
@@ -102,7 +102,7 @@
 | `/weekly-team-report` | チーム週次まとめを Notion 記録から自動生成 |
 | `dev-orchestra` スキル | システム開発（上位モデルが設計・レビュー、sonnetが実装） |
 | `creative-kv` スキル | 販促ビジュアル（SNS用4:5・A型看板A2・のぼり600×1800）。手本＋実物写真→Gemini生成→文字はコード。のぼりは `vegeone_nobori/` の骨格を差し替える。別PCの準備は `.claude/skills/creative-kv/SETUP.md` |
-| `reel-capcut` スキル | 動画づくりの入口。呼ばれたら作り方を説明して最初に決めることを問いかける（発注書 `templates/brief.md`）。様式は2つ：`pop`（50日企画の連載）／`restaurant`（店のメニュー・営業日・行き方。背景動画→CapCut→文字は後入れ。明朝・縁なし・OP/EDなし） |
+| `reel-capcut` スキル | 動画づくりの入口。呼ばれたら作り方を説明して最初に決めることを問いかける（発注書 `templates/brief.md`）。様式は3つ：`pop`（50日企画の連載）／`restaurant`（店のメニュー・営業日・行き方。背景動画→CapCut→文字は後入れ。明朝・縁なし・OP/EDなし）／お知らせ（閉店・オープンなどの告知。1カット約1秒・白字黒縁・`montage.py`。`reference/style_promo.md`） |
 
 ## 7. 用語集
 
