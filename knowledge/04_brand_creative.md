@@ -16,7 +16,7 @@
 - NG指摘：深緑は「ダサい」、落款「神戸」は見出しとかぶる、丸ゴシックはダサい
 
 ## 販促ビジュアル（広告4:5・A型看板・のぼり）の作り方＝スキル `creative-kv`（2026-10-09確立）
-- 手順と判断基準は `.claude/skills/creative-kv/SKILL.md`・`reference/lessons.md`・`reference/nobori.md`。メンバーは `templates/brief.md`（発注書）を埋める。実行は代表かまい、採否の判断は代表
+- 手順と判断基準は `.claude/skills/creative-kv/SKILL.md`・`reference/lessons.md`・`reference/nobori.md`。メンバーは `templates/brief.md`（発注書）を埋める。実行はゆうとかまい、採否の判断はゆうと（2026-10-09の取り決め）
 - **作り方の核**：①手本の広告を2〜3枚もらう ②商品は実物写真から素材化（グリーンバック #00FF00）③手本＋素材を渡して「1枚の絵」として生成 ④文字はコードで（明朝・字間・柔らかい影・5要素まで）⑤直すときは1つずつ
 - **商大祭2026の確定ビジュアル**＝金色グラデ地・巨大な割った焼き芋・蜜・大学芋の器とVEGEONEカップ・見出し「芋好き、集まれ！」・価格あり・QRなし（`reference/examples/kv_refarm_shodaisai_final.jpg`）。A型看板（写真系／黒板）とのぼり（金色・既存骨格の差し替え版）は**色・写真・文言をこれと揃える**
 - **のぼりの正解**＝既存の通年のぼり（`vegeone_nobori/nobori_line.py`：コーラル地・丸ごと野菜スープ・線画・スプーンのカップ）の骨格を変えず、**写真・文言・線画・地色だけ差し替える**（さつまいも版＝`vegeone_nobori/nobori_imo_gold.py`）。新規に作るより早く、外さない
