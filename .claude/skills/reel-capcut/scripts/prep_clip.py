@@ -6,16 +6,23 @@
   python prep_clip.py --shade 入力.mp4 出力.mp4     … 画面の上30%・下12%にうっすら暗いグラデーションを重ねる（文字を読みやすくする。様式②の決まり）
 
 横長や回転情報つきのスマホ動画は自動で縦に直し、中央を切って画面いっぱいにする。
+iPhone の HDR 動画（HLG）は色を変換して普通の明るさに戻す（hdr.py。GPU が使えなければ CPU の方式）。
 無音の動画には無音トラックを足す（CapCut と render_mp4 の両方で必要）。
 """
 import argparse, subprocess
 from PIL import Image
+import hdr
 
 
 def has_audio(p):
     out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=codec_type",
                           "-of", "csv=p=0", p], capture_output=True, text=True).stdout
     return "audio" in out
+
+
+def done(r):
+    if r.returncode:
+        raise SystemExit("変換に失敗しました:\n" + r.stderr[-2000:])
 
 
 def main():
@@ -31,9 +38,11 @@ def main():
         al[:top] = 150 * (1 - y[:top] / top) ** 1.4; al[H - bot:] = 90 * ((y[H - bot:] - (H - bot)) / bot) ** 1.4
         arr[..., 3] = al[:, None].astype(np.uint8)
         sh = os.path.join(tempfile.gettempdir(), "reel_shade.png"); Image.fromarray(arr, "RGBA").save(sh)
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", a.src, "-i", sh, "-filter_complex",
-                        "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[b];[b][1:v]overlay=0:0:format=auto[v]",
-                        "-map", "[v]", "-map", "0:a?", "-r", "30", "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", a.dst], check=True)
+        done(hdr.run(lambda pre, vf, tags: [
+            "ffmpeg", "-y", "-loglevel", "error", *pre, "-i", a.src, "-i", sh, "-filter_complex",
+            "[0:v]%s[b];[b][1:v]overlay=0:0:format=auto[v]" % vf,
+            "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", *tags,
+            "-c:a", "copy", "-movflags", "+faststart", a.dst], a.src))
         print("できました:", a.dst, "(上下を暗く)"); return
     if a.crop:
         im = Image.open(a.src).convert("RGB"); w, h = im.size
@@ -44,18 +53,20 @@ def main():
         im.crop(box).resize((1080, 1920), Image.LANCZOS).save(a.dst)
         print("できました:", a.dst, "(1080x1920)")
         return
-    cmd = ["ffmpeg", "-y", "-loglevel", "error"]
-    if a.ss:
-        cmd += ["-ss", str(a.ss)]
-    if a.t:
-        cmd += ["-t", str(a.t)]
-    cmd += ["-i", a.src]
-    if not has_audio(a.src):
-        cmd += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-shortest"]
-    cmd += ["-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920", "-r", "30",
-            "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
-            "-movflags", "+faststart", a.dst]
-    subprocess.run(cmd, check=True)
+    print("色:", hdr.method(a.src))
+
+    def build(pre, vf, tags):
+        cmd = ["ffmpeg", "-y", "-loglevel", "error", *pre]
+        if a.ss:
+            cmd += ["-ss", str(a.ss)]
+        if a.t:
+            cmd += ["-t", str(a.t)]
+        cmd += ["-i", a.src]
+        if not has_audio(a.src):
+            cmd += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-shortest"]
+        return cmd + ["-vf", vf, "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", *tags, "-c:a", "aac", "-b:a", "160k",
+                      "-movflags", "+faststart", a.dst]
+    done(hdr.run(build, a.src))
     print("できました:", a.dst)
 
 

@@ -19,6 +19,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import make_draft as md  # noqa: E402
+import hdr  # noqa: E402
 
 US = md.US
 PX_PER_SIZE = 100 / md.BASE_SIZE   # CapCut size 13 = 100px
@@ -90,15 +91,17 @@ def main(plan_path, out_path):
         src = os.path.join(assets_dir, v["file"])
         dst = os.path.join(W, "p%03d.mp4" % i)
         # 既定は画面いっぱい（cover）。収める指定（fit=contain）のときだけ黒帯で収める
-        vf = "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920"
+        # iPhone の HDR は色を変換し直す（そのままだと灰色っぽく暗く沈む。hdr.py）
         fit = next((c.get("fit") for s in plan["segments"] for c in s["clips"] if c["file"] == v["file"]), None)
-        if fit == "contain":
-            vf = "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2"
-        vf += ",fps=30,setsar=1,format=yuv420p"
-        ff(["-ss", "%.6f" % (v["src_off"] / US), "-t", "%.6f" % (v["dur"] / US), "-i", src,
-            "-vf", vf, "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
-            "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10", dst],
-           "切り出し " + v["file"])
+        if hdr.is_hdr(src):
+            print("  %s: %s" % (v["file"], hdr.method(src)))
+        r = hdr.run(lambda pre, vf, tags: ["ffmpeg", "-hide_banner", "-nostdin", "-y", "-v", "error"] + pre + [
+            "-ss", "%.6f" % (v["src_off"] / US), "-t", "%.6f" % (v["dur"] / US), "-i", src,
+            "-vf", vf, "-an", "-c:v", "libx264", "-preset", "medium", "-crf", "14",
+            "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10", *tags, dst],
+            src, fit="contain" if fit == "contain" else "cover")
+        if r.returncode:
+            md.die("切り出し %s に失敗しました:\n%s" % (v["file"], r.stderr[-2000:]))
         got = probe_dur(dst)
         if abs(got - v["dur"] / US) > 0.08:
             md.die("%s の切り出し尺がずれました（期待 %.2f / 実際 %.2f）" % (v["file"], v["dur"] / US, got))
@@ -132,7 +135,7 @@ def main(plan_path, out_path):
         fx = os.path.join(W, "filter_join.txt")
         with open(fx, "w", encoding="utf-8") as f:
             f.write(";\n".join(fc))
-        ff(ins + ["-filter_complex_script", fx, "-map", "[v]", "-t", "%.3f" % total, "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+        ff(ins + ["-filter_complex_script", fx, "-map", "[v]", "-t", "%.3f" % total, "-c:v", "libx264", "-preset", "medium", "-crf", "14",
                   "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10", "-pix_fmt", "yuv420p", joined], "結合（ディゾルブ）")
     else:
         ff(["-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined], "結合")
@@ -226,7 +229,7 @@ def main(plan_path, out_path):
     print("書き出します（映像）")
     vtmp = os.path.join(W, "video_only.mp4")
     ff(vin + ["-filter_complex_script", fv, "-map", "[v]", "-an", "-t", "%.3f" % total,
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+        "-c:v", "libx264", "-preset", "medium", "-crf", "14",
         "-x264-params", "threads=2:lookahead-threads=1:rc-lookahead=10", "-pix_fmt", "yuv420p", vtmp], "映像の書き出し")
     if n:
         fa = os.path.join(W, "filter_audio.txt")

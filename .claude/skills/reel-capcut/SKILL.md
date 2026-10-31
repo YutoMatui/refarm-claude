@@ -108,6 +108,17 @@ python scripts/scan_assets.py 落ち込み 語り        # ことばで探す
 台本の「画・素材」欄のことばで引く。ファイル名が `IMG_1234.MOV` のままだと中身で探せないので、
 その場合は**中身を見て `IMG_1234_内容.MOV` にリネームしてから**索引を作り直す。
 
+**iPhone の実写は HDR（色の変換が要る）。** 店のメンバーが撮る iPhone の動画は HDR（HLG・BT.2020・10bit）。
+普通に縮めるだけだと灰色っぽく暗く沈む（2026-10-31「謎のエフェクト・暗い・画質が悪い」と言われた原因）。
+`prep_clip.py` と `render_mp4.py` は `scripts/hdr.py` で自動で直すので、**実写はかならずこの2つを通す**（CapCut に元の MOV を直接入れない）。
+
+- ffprobe で `color_transfer` が `arib-std-b67`（HLG）か `smpte2084`（PQ）なら HDR として扱う
+- そのPCで GPU（Vulkan＋libplacebo）が使える → GPU で色を変換して縮める（トーンマッピング bt.2390）。いちばんきれい
+- 使えない／途中で失敗した（メモリ不足など）→ CPU の方式（zscale＋tonemap=hable）で自動でやり直す。少し遅く、色が少し地味
+- 縦撮りでも横撮りでも、中央を 9:16 で切って画面いっぱいにする（`fit: contain` のときだけ黒帯で収める）
+- 普通の動画（SDR・生成動画）はこれまでどおり lanczos で縮めるだけ
+- どちらの方式になったかは実行中に「色: HDR→SDR（GPU・libplacebo）」のように出る。CPU の方式を試すときは環境変数 `REEL_HDR=fallback`
+
 ### 4. 割り付けを決めて、見てもらう
 
 ここが一番だいじで、自動化できない。**セリフの意味と画が合っているか**は人が見る。
@@ -243,7 +254,7 @@ ffmpeg -i 音声.wav -af "atrim=start=2.20,asetpts=N/SR/TB" 音声_修正.wav   
 
 1. 最初の問いかけで答えをそろえ、原稿の表（秒・映像・文字）を書いて見せる。1画面の文字は2行まで
 2. **背景動画（文字なし）をカットごとに用意する。** 置き場は `video/〈企画名〉/clips/`
-   - 実写がある → `python scripts/prep_clip.py 入力.MOV clips/03_xxx.mp4 --ss 開始秒 --t 長さ`（縦1080×1920にそろえ、無音なら無音トラックを足す）
+   - 実写がある → `python scripts/prep_clip.py 入力.MOV clips/03_xxx.mp4 --ss 開始秒 --t 長さ`（縦1080×1920にそろえ、iPhone の HDR は色を直し、無音なら無音トラックを足す）
    - 動きのない絵（キービジュアル・商品写真）→ `python scripts/prep_clip.py --crop 元絵.png clips/src_916.png` で9:16に切ってから `python scripts/gen_clip.py 実行 clips/01_xxx.mp4 clips/src_916.png "動きの指示"`（8秒・約180円・月上限あり）。動かすものは1つ＋湯気くらいに絞る。料理の見た目は変えない。無料でやるなら Dreamina か CapCut の AI動画生成（Seedance 2.0）に同じ絵と指示を手作業で
    - 営業日カレンダー → `python scripts/bg_calendar.py --year 2026 --month 11 --open 5,6,12 --closed 10 --cup 商品のグリーンバック.png --out clips/02_calendar.mp4`
    - 最後の1枚（ロゴ）→ `python scripts/bg_end.py --out clips/05_end.mp4`
@@ -277,4 +288,6 @@ ffmpeg -i 音声.wav -af "atrim=start=2.20,asetpts=N/SR/TB" 音声_修正.wav   
 | mp4 のテロップが細いゴシック | フォントのパスに日本語が入って ffmpeg が読めていない。`render_mp4.py` は ASCII パスにコピーして使う設計なので、`%TEMP%` に日本語が入っていないか確認 |
 | テロップが既定のゴシック | このPCのCapCutにフォント「企業」がまだ無い。一度フォント一覧から「企業」を選べば次から自動で付く |
 | 横長素材に黒帯 | `fit` を `contain` にしている。外す（既定の cover に戻す） |
+| 実写が灰色っぽく暗い・白っぽく沈む | iPhone の HDR 動画をそのまま使っている。`prep_clip.py` を通す（自動で色を変換する）。CapCut に元の MOV を直接入れない |
+| 「GPU の方式で失敗したので、CPU の方式でやり直します」と出る | メモリ不足か GPU ドライバの問題。そのまま CPU の方式で仕上がるので待てばよい（他のアプリを閉じると GPU で通りやすい） |
 | 素材が見つかりませんで止まる | `_共通素材` がDriveに無い、またはファイル名の表記ゆれ。`setup_check.py` で何が無いか出る |
